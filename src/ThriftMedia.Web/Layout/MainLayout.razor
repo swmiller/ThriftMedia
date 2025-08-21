@@ -1,16 +1,50 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+@* Ensure the layout uses flexbox to keep the footer at the bottom when content is short *@
+<style>
+    body,
+    .main-layout-root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
+        flex: 1 0 auto;
+    }
+
+    footer {
+        flex-shrink: 0;
+    }
+</style>
+
+<header class="bg-primary text-white py-4 mb-4">
+    <div class="container text-center">
+        <h1 class="display-4">Thrift Media</h1>
+        <p class="lead">Search thrift store treasures—books, albums, movies, and more. Find your next great media deal!
+        </p>
     </div>
+</header>
 
+<div class="main-layout-root">
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <div class="container d-flex justify-content-center">
+            <article class="content px-4" style="max-width: 800px; width: 100%;">
+                @Body
+            </article>
         </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
     </main>
+
+    <footer class="bg-light text-center py-4 mt-5 border-top">
+        <div class="container">
+            <div class="mb-2">
+                &copy; 2025 Thrift Media. All rights reserved.
+                &nbsp;|&nbsp;
+                <a href="/about" class="text-decoration-none">About</a>
+            </div>
+            <small class="text-muted d-block mt-2">
+                Disclaimer: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus
+                tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.
+            </small>
+        </div>
+    </footer>
 </div>
