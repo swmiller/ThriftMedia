@@ -1,21 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@* Ensure the layout uses flexbox to keep the footer at the bottom when content is short *@
-<style>
-    body,
-    .main-layout-root {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    main {
-        flex: 1 0 auto;
-    }
-
-    footer {
-        flex-shrink: 0;
-    }
-</style>
+@* Layout uses CSS classes for flexbox and spacing. Styles moved to app.css *@
 
 <header class="bg-primary text-white py-4 mb-4">
     <div class="container text-center">
@@ -28,7 +12,7 @@
 <div class="main-layout-root">
     <main>
         <div class="container d-flex justify-content-center">
-            <article class="content px-4" style="max-width: 800px; width: 100%;">
+            <article class="content px-4 main-content">
                 @Body
             </article>
         </div>
