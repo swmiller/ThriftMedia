@@ -10,6 +10,7 @@ public partial class Media
     public string MediaType { get; set; } = string.Empty;
     public string ImageUrl { get; set; } = string.Empty;
     public string OcrPayloadJson { get; set; } = string.Empty;
+    public bool IsExplicitContent { get; set; }
     public string CreatedBy { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public string? UpdatedBy { get; set; }

@@ -9,6 +9,8 @@ public partial class Store
     public string StoreName { get; set; } = string.Empty;
     public Address Address { get; set; } = new Address();
     public string? PhoneNumber { get; set; }
+    public string? BusinessLicenseImageUri { get; set; }
+    public bool ExplicitContentFlagged { get; set; }
     public string CreatedBy { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public string? UpdatedBy { get; set; }
