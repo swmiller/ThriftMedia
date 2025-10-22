@@ -3,8 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Add PostgreSQL database
-var postgres = builder.AddPostgres("postgres");
+// Add PostgreSQL database with persistent storage
+var postgres = builder.AddPostgres("postgres")
+    .WithDataVolume();
 var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
 
 // Register API project and reference the database
