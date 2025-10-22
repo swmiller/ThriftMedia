@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Connect to the database
 var connectionString = builder.Configuration.GetConnectionString("ThriftMediaDb");
 builder.Services.AddDbContext<ThriftMediaDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

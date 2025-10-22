@@ -9,8 +9,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ThriftMedi
     public ThriftMediaDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<ThriftMediaDbContext>();
-        var connectionString = "Server=steve-miller;Database=ThriftMediaDb;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true";
-        optionsBuilder.UseSqlServer(connectionString);
+        var connectionString = "Host=localhost;Database=ThriftMediaDb;Username=postgres;Password=postgres";
+        optionsBuilder.UseNpgsql(connectionString);
         return new ThriftMediaDbContext(optionsBuilder.Options);
     }
 }

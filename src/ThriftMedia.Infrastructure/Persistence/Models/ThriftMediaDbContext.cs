@@ -17,12 +17,10 @@ public partial class ThriftMediaDbContext : DbContext
         {
             entity.HasKey(e => e.MediaId);
             entity.ToTable("Media", "media");
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
             entity.Property(e => e.ImageUrl).HasMaxLength(500);
             entity.Property(e => e.MediaType).HasMaxLength(50);
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-            entity.Property(e => e.UpdatedBy).HasMaxLength(100);
             entity.HasOne(d => d.Store).WithMany(p => p.MediaItems)
                 .HasForeignKey(d => d.StoreId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -31,13 +29,12 @@ public partial class ThriftMediaDbContext : DbContext
 
         modelBuilder.Entity<Store>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Store__3214EC07271D525F");
+            entity.HasKey(e => e.Id);
             entity.ToTable("Store", "media");
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
             entity.Property(e => e.PhoneNumber).HasMaxLength(50);
             entity.Property(e => e.StoreName).HasMaxLength(200);
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
             entity.Property(e => e.UpdatedBy).HasMaxLength(100);
             entity.OwnsOne(e => e.Address, address =>
             {

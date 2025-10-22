@@ -12,10 +12,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        var connectionString = configuration.GetConnectionString("ThriftMediaDb")
+            ?? throw new InvalidOperationException("Connection string 'ThriftMediaDb' not found.");
 
-        services.AddDbContext<ThriftMediaDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddDbContext<ThriftMediaDbContext>(options => options.UseNpgsql(connectionString));
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IMediaModerationService, MediaModerationService>();

@@ -3,15 +3,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Add database connection string
-var thriftMediaDbConnectionString = builder.AddConnectionString("ThriftMediaDb");
+// Add PostgreSQL database
+var postgres = builder.AddPostgres("postgres");
+var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
 
 // Register API project and reference the database
 builder.AddProject<Projects.ThriftMedia_Api>("thriftmediaapi")
-    .WithReference(thriftMediaDbConnectionString);
+    .WithReference(thriftMediaDb);
 
 // Register Web project
 builder.AddProject<Projects.ThriftMedia_Web>("thriftmediaweb");
 
 builder.Build().Run();
-
