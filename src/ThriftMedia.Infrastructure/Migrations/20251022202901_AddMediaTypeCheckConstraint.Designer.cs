@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ThriftMedia.Data.Models;
@@ -11,9 +12,11 @@ using ThriftMedia.Data.Models;
 namespace ThriftMedia.Infrastructure.Migrations
 {
     [DbContext(typeof(ThriftMediaDbContext))]
-    partial class ThriftMediaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251022202901_AddMediaTypeCheckConstraint")]
+    partial class AddMediaTypeCheckConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

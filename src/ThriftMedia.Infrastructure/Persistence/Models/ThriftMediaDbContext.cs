@@ -15,12 +15,15 @@ public partial class ThriftMediaDbContext : DbContext
     {
         modelBuilder.Entity<Media>(entity =>
         {
-            entity.HasKey(e => e.MediaId);
-            entity.ToTable("Media", "media");
+            entity.HasKey(e => e.Id);
+            entity.ToTable("Media", "media", t =>
+                t.HasCheckConstraint("CK_Media_Type",
+                    "\"Type\" IN ('book', 'video', 'cdrom', 'vinyl-record', 'eight-track', 'cassette', 'dvd', 'blu-ray', 'magazine', 'comic', 'other', 'unknown')"));
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
-            entity.Property(e => e.ImageUrl).HasMaxLength(500);
-            entity.Property(e => e.MediaType).HasMaxLength(50);
+            entity.Property(e => e.ImageUri).HasMaxLength(500);
+            entity.Property(e => e.Type).HasMaxLength(50);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(100);
             entity.HasOne(d => d.Store).WithMany(p => p.MediaItems)
                 .HasForeignKey(d => d.StoreId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -33,9 +36,9 @@ public partial class ThriftMediaDbContext : DbContext
             entity.ToTable("Store", "media");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
-            entity.Property(e => e.PhoneNumber).HasMaxLength(50);
-            entity.Property(e => e.StoreName).HasMaxLength(200);
+            entity.Property(e => e.Name).HasMaxLength(200);
             entity.Property(e => e.UpdatedBy).HasMaxLength(100);
+            entity.Property(e => e.BusinessLicenseImageUri).HasMaxLength(500);
             entity.OwnsOne(e => e.Address, address =>
             {
                 address.Property(a => a.Street).HasMaxLength(100);

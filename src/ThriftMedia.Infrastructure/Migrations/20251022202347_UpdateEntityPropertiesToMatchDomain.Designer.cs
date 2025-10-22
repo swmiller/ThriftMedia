@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ThriftMedia.Data.Models;
@@ -11,9 +12,11 @@ using ThriftMedia.Data.Models;
 namespace ThriftMedia.Infrastructure.Migrations
 {
     [DbContext(typeof(ThriftMediaDbContext))]
-    partial class ThriftMediaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251022202347_UpdateEntityPropertiesToMatchDomain")]
+    partial class UpdateEntityPropertiesToMatchDomain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,10 +73,7 @@ namespace ThriftMedia.Infrastructure.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("Media", "media", t =>
-                        {
-                            t.HasCheckConstraint("CK_Media_Type", "\"Type\" IN ('book', 'video', 'cdrom', 'vinyl-record', 'eight-track', 'cassette', 'dvd', 'blu-ray', 'magazine', 'comic', 'other', 'unknown')");
-                        });
+                    b.ToTable("Media", "media");
                 });
 
             modelBuilder.Entity("ThriftMedia.Data.Models.Store", b =>

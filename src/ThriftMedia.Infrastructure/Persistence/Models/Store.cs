@@ -6,9 +6,8 @@ namespace ThriftMedia.Data.Models;
 public partial class Store
 {
     public int Id { get; set; }
-    public string StoreName { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
     public Address Address { get; set; } = new Address();
-    public string? PhoneNumber { get; set; }
     public string? BusinessLicenseImageUri { get; set; }
     public bool ExplicitContentFlagged { get; set; }
     public string CreatedBy { get; set; } = string.Empty;
