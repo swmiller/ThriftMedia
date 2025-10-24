@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <Sdk Name="Aspire.AppHost.Sdk"
          Version="9.0.0" />
@@ -15,7 +15,13 @@
                           Version="9.4.0" />
         <PackageReference Include="Aspire.Hosting.PostgreSQL"
                           Version="9.4.0" />
+        <PackageReference Include="Aspire.Hosting.Azure.ServiceBus"
+                          Version="9.4.0" />
+        <PackageReference Include="Aspire.Hosting.Azure.Storage"
+                          Version="9.4.0" />
         <ProjectReference Include="..\ThriftMedia.Web\ThriftMedia.Web.csproj" />
         <ProjectReference Include="..\ThriftMedia.Api\ThriftMedia.Api.csproj" />
+        <ProjectReference Include="..\ThriftMedia.Admin\ThriftMedia.Admin.csproj" />
+        <ProjectReference Include="..\ThriftMedia.MediaProcessor\ThriftMedia.MediaProcessor.csproj" />
     </ItemGroup>
 </Project>

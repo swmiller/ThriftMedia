@@ -19,15 +19,16 @@ public class MediaEntityTests
     public void Create_WithValidData_ReturnsMediaEntity()
     {
         // Act
-        var media = Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime);
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
 
         // Assert
         Assert.NotNull(media);
-        Assert.Equal(0, media.Id); // Not yet persisted
+        Assert.NotEqual(Guid.Empty, media.Id);
         Assert.Equal(ValidStoreId, media.StoreId);
-        Assert.Equal(ValidMediaType, media.Type);
+        Assert.Equal(MediaType.Unknown, media.Type); // Initially unknown
+        Assert.Equal(MediaStatus.Uploaded, media.Status); // Initially uploaded
         Assert.Equal(ValidImageUri, media.ImageUri);
-        Assert.Equal(ValidOcrJson, media.OcrPayloadJson);
+        Assert.Null(media.OcrPayloadJson); // Not set yet
         Assert.False(media.IsExplicitContent);
         Assert.Equal(CreatedBy, media.Audit.CreatedBy);
         Assert.Equal(TestTime, media.Audit.CreatedAtUtc);
@@ -43,19 +44,9 @@ public class MediaEntityTests
     {
         // Act & Assert
         var exception = Assert.Throws<DomainValidationException>(() =>
-            Media.Create(invalidStoreId, ValidMediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime));
+            Media.Create(invalidStoreId, ValidImageUri, CreatedBy, TestTime));
 
         Assert.Contains("StoreId", exception.Message);
-    }
-
-    [Fact]
-    public void Create_WithNullMediaType_ThrowsDomainValidationException()
-    {
-        // Act & Assert
-        var exception = Assert.Throws<DomainValidationException>(() =>
-            Media.Create(ValidStoreId, null!, ValidImageUri, ValidOcrJson, CreatedBy, TestTime));
-
-        Assert.Contains("MediaType is required", exception.Message);
     }
 
     [Fact]
@@ -63,7 +54,7 @@ public class MediaEntityTests
     {
         // Act & Assert
         var exception = Assert.Throws<DomainValidationException>(() =>
-            Media.Create(ValidStoreId, ValidMediaType, null!, ValidOcrJson, CreatedBy, TestTime));
+            Media.Create(ValidStoreId, null!, CreatedBy, TestTime));
 
         Assert.Contains("ImageUri is required", exception.Message);
     }
@@ -76,55 +67,28 @@ public class MediaEntityTests
 
         // Act & Assert
         var exception = Assert.Throws<DomainValidationException>(() =>
-            Media.Create(ValidStoreId, ValidMediaType, relativeUri, ValidOcrJson, CreatedBy, TestTime));
+            Media.Create(ValidStoreId, relativeUri, CreatedBy, TestTime));
 
         Assert.Contains("absolute", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("   ")]
-    public void Create_WithNullOrEmptyOcrJson_ThrowsDomainValidationException(string? ocrJson)
-    {
-        // Act & Assert
-        var exception = Assert.Throws<DomainValidationException>(() =>
-            Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, ocrJson, CreatedBy, TestTime));
-
-        Assert.Contains("OcrPayloadJson is required", exception.Message);
-    }
-
-    [Fact]
-    public void Create_WithInvalidJson_ThrowsDomainValidationException()
-    {
-        // Arrange
-        var invalidJson = "{this is not valid json}";
-
-        // Act & Assert
-        var exception = Assert.Throws<DomainValidationException>(() =>
-            Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, invalidJson, CreatedBy, TestTime));
-
-        Assert.Contains("not valid JSON", exception.Message);
-    }
-
     #endregion
 
-    #region UpdateOcr Tests
+    #region SetOcrData Tests
 
     [Fact]
-    public void UpdateOcr_WithValidJson_UpdatesOcrAndAudit()
+    public void SetOcrData_WithValidJson_UpdatesOcrAndAudit()
     {
         // Arrange
-        var media = Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime);
-        var newOcrJson = """{"title": "Updated Book", "author": "Updated Author"}""";
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
         var updatedBy = "updater-user";
         var updateTime = TestTime.AddHours(1);
 
         // Act
-        media.UpdateOcr(newOcrJson, updatedBy, updateTime);
+        media.SetOcrData(ValidOcrJson, updatedBy, updateTime);
 
         // Assert
-        Assert.Equal(newOcrJson, media.OcrPayloadJson);
+        Assert.Equal(ValidOcrJson, media.OcrPayloadJson);
         Assert.Equal(updatedBy, media.Audit.UpdatedBy);
         Assert.Equal(updateTime, media.Audit.UpdatedAtUtc);
         Assert.Equal(CreatedBy, media.Audit.CreatedBy); // Original creator unchanged
@@ -135,28 +99,28 @@ public class MediaEntityTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void UpdateOcr_WithNullOrEmptyJson_ThrowsDomainValidationException(string? ocrJson)
+    public void SetOcrData_WithNullOrEmptyJson_ThrowsDomainValidationException(string? ocrJson)
     {
         // Arrange
-        var media = Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime);
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
 
         // Act & Assert
         var exception = Assert.Throws<DomainValidationException>(() =>
-            media.UpdateOcr(ocrJson, "updater", TestTime.AddHours(1)));
+            media.SetOcrData(ocrJson, "updater", TestTime.AddHours(1)));
 
         Assert.Contains("OcrPayloadJson is required", exception.Message);
     }
 
     [Fact]
-    public void UpdateOcr_WithInvalidJson_ThrowsDomainValidationException()
+    public void SetOcrData_WithInvalidJson_ThrowsDomainValidationException()
     {
         // Arrange
-        var media = Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime);
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
         var invalidJson = "not valid json at all";
 
         // Act & Assert
         var exception = Assert.Throws<DomainValidationException>(() =>
-            media.UpdateOcr(invalidJson, "updater", TestTime.AddHours(1)));
+            media.SetOcrData(invalidJson, "updater", TestTime.AddHours(1)));
 
         Assert.Contains("not valid JSON", exception.Message);
     }
@@ -169,7 +133,7 @@ public class MediaEntityTests
     public void FlagAsExplicitContent_SetsFlag_UpdatesAudit()
     {
         // Arrange
-        var media = Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime);
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
         var updatedBy = "moderator";
         var updateTime = TestTime.AddHours(1);
 
@@ -178,6 +142,7 @@ public class MediaEntityTests
 
         // Assert
         Assert.True(media.IsExplicitContent);
+        Assert.Equal(MediaStatus.Flagged, media.Status);
         Assert.Equal(updatedBy, media.Audit.UpdatedBy);
         Assert.Equal(updateTime, media.Audit.UpdatedAtUtc);
     }
@@ -186,7 +151,7 @@ public class MediaEntityTests
     public void FlagAsExplicitContent_IsIdempotent()
     {
         // Arrange
-        var media = Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime);
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
         var firstUpdater = "moderator1";
         var firstUpdateTime = TestTime.AddHours(1);
         media.FlagAsExplicitContent(firstUpdater, firstUpdateTime);
@@ -204,19 +169,37 @@ public class MediaEntityTests
 
     #endregion
 
-    #region ClassifyContent Tests
+    #region Classify Tests
 
     [Fact]
-    public void ClassifyContent_ReturnsStubValue()
+    public void Classify_WithValidMediaType_UpdatesTypeAndAudit()
     {
         // Arrange
-        var media = Media.Create(ValidStoreId, ValidMediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime);
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
+        var updatedBy = "classifier";
+        var updateTime = TestTime.AddHours(1);
 
         // Act
-        var result = media.ClassifyContent();
+        media.Classify(ValidMediaType, updatedBy, updateTime);
 
-        // Assert - stub currently returns false
-        Assert.False(result);
+        // Assert
+        Assert.Equal(ValidMediaType, media.Type);
+        Assert.Equal(updatedBy, media.Audit.UpdatedBy);
+        Assert.Equal(updateTime, media.Audit.UpdatedAtUtc);
+    }
+
+    [Fact]
+    public void Classify_WithUnknownType_SetsPendingClassificationStatus()
+    {
+        // Arrange
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
+
+        // Act
+        media.Classify(MediaType.Unknown, "classifier", TestTime.AddHours(1));
+
+        // Assert
+        Assert.Equal(MediaType.Unknown, media.Type);
+        Assert.Equal(MediaStatus.PendingClassification, media.Status);
     }
 
     #endregion
@@ -236,16 +219,16 @@ public class MediaEntityTests
     [InlineData("comic")]
     [InlineData("other")]
     [InlineData("unknown")]
-    public void Create_WithAllValidMediaTypes_Succeeds(string mediaTypeValue)
+    public void Classify_WithAllValidMediaTypes_Succeeds(string mediaTypeValue)
     {
         // Arrange
         var mediaType = MediaType.From(mediaTypeValue);
+        var media = Media.Create(ValidStoreId, ValidImageUri, CreatedBy, TestTime);
 
         // Act
-        var media = Media.Create(ValidStoreId, mediaType, ValidImageUri, ValidOcrJson, CreatedBy, TestTime);
+        media.Classify(mediaType, "classifier", TestTime.AddHours(1));
 
         // Assert
-        Assert.NotNull(media);
         Assert.Equal(mediaType, media.Type);
     }
 
