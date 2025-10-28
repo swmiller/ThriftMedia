@@ -104,3 +104,40 @@ orleans.codegen.cs
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Angular
+node_modules/
+npm-debug.log
+yarn-error.log
+.angular/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# Angular cache
+.angular/cache/
+.sass-cache/
+connect.lock
+coverage/
+libpeerconnection.log
+testem.log
+typings/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Angular specific build outputs
+*.js.map
+*.ngfactory.js
+*.ngstyle.js
+*.ngsummary.json
