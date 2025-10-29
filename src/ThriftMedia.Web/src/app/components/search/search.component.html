@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Search Media</h1>
+      <p class="lead">Find books, music, movies, and more</p>
+
+      <div class="card mt-4">
+        <div class="card-body">
+          <form (ngSubmit)="onSearch()">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search for media..."
+                [(ngModel)]="searchQuery"
+                name="searchQuery"
+              />
+              <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+          </form>
+
+          <div
+            *ngIf="searchResults.length === 0"
+            class="text-center text-muted py-5"
+          >
+            <p>Enter a search term to find media items</p>
+          </div>
+
+          <div *ngIf="searchResults.length > 0" class="row">
+            <div class="col-md-12">
+              <h5>Results</h5>
+              <div class="list-group">
+                <div *ngFor="let item of searchResults" class="list-group-item">
+                  <h6>{{ item.title }}</h6>
+                  <p class="mb-1">{{ item.description }}</p>
+                  <small>{{ item.type }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

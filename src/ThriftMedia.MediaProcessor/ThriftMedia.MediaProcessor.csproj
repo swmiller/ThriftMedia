@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-ThriftMedia.MediaProcessor-41385953-66d5-45de-b8b6-0217d9492378</UserSecretsId>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Azure.Messaging.ServiceBus"
+                          Version="7.18.2" />
+        <PackageReference Include="MediatR"
+                          Version="12.4.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting"
+                          Version="9.0.10" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ThriftMedia.Application\ThriftMedia.Application.csproj" />
+        <ProjectReference Include="..\ThriftMedia.ServiceDefaults\ThriftMedia.ServiceDefaults.csproj" />
+    </ItemGroup>
+</Project>

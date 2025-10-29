@@ -3,15 +3,41 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Add database connection string
-var thriftMediaDbConnectionString = builder.AddConnectionString("ThriftMediaDb");
+// Add PostgreSQL database with persistent storage
+var postgres = builder.AddPostgres("postgres")
+    .WithDataVolume();
+var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
+
+// Add Azure Service Bus for media processing queue
+var serviceBus = builder.AddAzureServiceBus("servicebus")
+    .RunAsEmulator();
+var mediaProcessingQueue = serviceBus.AddServiceBusQueue("media-processing");
+
+// Add Azure Blob Storage for media images
+var blobStorage = builder.AddAzureStorage("storage")
+    .RunAsEmulator();
+var mediaImages = blobStorage.AddBlobs("media-images");
 
 // Register API project and reference the database
-builder.AddProject<Projects.ThriftMedia_Api>("thriftmediaapi")
-    .WithReference(thriftMediaDbConnectionString);
+var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
+    .WithReference(thriftMediaDb);
 
-// Register Web project
-builder.AddProject<Projects.ThriftMedia_Web>("thriftmediaweb");
+// Register Admin Portal (Angular app - store administration)
+var admin = builder.AddNpmApp("admin", "../ThriftMedia.Admin", "start")
+    .WithHttpEndpoint(port: 5001, env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+
+// Register Consumer Web (Angular app - public search)
+var web = builder.AddNpmApp("web", "../ThriftMedia.Web", "start")
+    .WithHttpEndpoint(port: 5002, env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+
+// Register Media Processor Worker Service
+var mediaProcessor = builder.AddProject<Projects.ThriftMedia_MediaProcessor>("media-processor")
+    .WithReference(thriftMediaDb)
+    .WithReference(mediaProcessingQueue)
+    .WithReference(mediaImages);
 
 builder.Build().Run();
-
