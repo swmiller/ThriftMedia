@@ -24,5 +24,6 @@
         <ProjectReference Include="..\ThriftMedia.Admin\ThriftMedia.Admin.csproj" />
         <ProjectReference Include="..\ThriftMedia.Api\ThriftMedia.Api.csproj" />
         <ProjectReference Include="..\ThriftMedia.MediaProcessor\ThriftMedia.MediaProcessor.csproj" />
+        <ProjectReference Include="..\ThriftMedia.Web\ThriftMedia.Web.csproj" />
     </ItemGroup>
 </Project>

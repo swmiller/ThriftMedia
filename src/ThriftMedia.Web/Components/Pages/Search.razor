@@ -1,0 +1,182 @@
+@page "/search"
+@rendermode InteractiveServer
+
+<PageTitle>Search</PageTitle>
+
+<div class="container mt-4">
+    <h1>Search Media</h1>
+    
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label for="searchQuery" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="searchQuery" @bind="searchQuery"
+                                   @bind:event="oninput" placeholder="Enter title, author, or keywords..." />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="mediaType" class="form-label">Media Type</label>
+                            <select class="form-select" id="mediaType" @bind="selectedMediaType">
+                                <option value="">All Types</option>
+                                <option value="Book">Book</option>
+                                <option value="DVD">DVD</option>
+                                <option value="CD">CD</option>
+                                <option value="Game">Game</option>
+                                <option value="Vinyl">Vinyl</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <button class="btn btn-primary" @onclick="PerformSearch">
+                                <span class="bi bi-search"></span> Search
+                            </button>
+                            <button class="btn btn-outline-secondary ms-2" @onclick="ClearSearch">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @if (isSearching)
+    {
+        <div class="mt-4 text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Searching...</span>
+            </div>
+        </div>
+    }
+    else if (searchResults != null)
+    {
+        <div class="mt-4">
+            <h4>Search Results (@searchResults.Count)</h4>
+            
+            @if (!searchResults.Any())
+            {
+                <div class="alert alert-info">
+                    <p>No results found. Try adjusting your search criteria.</p>
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+                    @foreach (var item in searchResults)
+                    {
+                        <div class="col">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-primary mb-2">@item.MediaType</span>
+                                    <h5 class="card-title">@item.Title</h5>
+                                    <p class="card-text text-muted">@item.Description</p>
+                                    <p class="card-text">
+                                        <strong class="text-success">@item.Price.ToString("C")</strong>
+                                    </p>
+                                    <span class="badge bg-@GetConditionBadgeClass(item.Condition)">
+                                        @item.Condition
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private string searchQuery = string.Empty;
+    private string selectedMediaType = string.Empty;
+    private bool isSearching = false;
+    private List<MediaSearchResult>? searchResults;
+
+    private async Task PerformSearch()
+    {
+        isSearching = true;
+        try
+        {
+            // TODO: Call API to search media items
+            await Task.Delay(800); // Simulate API call
+            
+            // Sample data for now
+            searchResults = new List<MediaSearchResult>
+            {
+                new() {
+                    Id = 1,
+                    Title = "The Great Gatsby",
+                    Description = "Classic American novel",
+                    MediaType = "Book",
+                    Price = 12.99m,
+                    Condition = "Good"
+                },
+                new() {
+                    Id = 2,
+                    Title = "Inception",
+                    Description = "Mind-bending thriller",
+                    MediaType = "DVD",
+                    Price = 8.99m,
+                    Condition = "Excellent"
+                },
+                new() {
+                    Id = 3,
+                    Title = "Abbey Road",
+                    Description = "The Beatles masterpiece",
+                    MediaType = "Vinyl",
+                    Price = 24.99m,
+                    Condition = "Very Good"
+                },
+            };
+            
+            // Filter by media type if selected
+            if (!string.IsNullOrEmpty(selectedMediaType))
+            {
+                searchResults = searchResults
+                    .Where(r => r.MediaType == selectedMediaType)
+                    .ToList();
+            }
+            
+            // Filter by search query if provided
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                searchResults = searchResults
+                    .Where(r => r.Title.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+        }
+        finally
+        {
+            isSearching = false;
+        }
+    }
+
+    private void ClearSearch()
+    {
+        searchQuery = string.Empty;
+        selectedMediaType = string.Empty;
+        searchResults = null;
+    }
+
+    private string GetConditionBadgeClass(string condition) => condition switch
+    {
+        "Excellent" => "success",
+        "Very Good" => "primary",
+        "Good" => "info",
+        "Fair" => "warning",
+        _ => "secondary"
+    };
+
+    private class MediaSearchResult
+    {
+        public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string MediaType { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public string Condition { get; set; } = string.Empty;
+    }
+}

@@ -26,11 +26,9 @@ var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
 var admin = builder.AddProject<Projects.ThriftMedia_Admin>("admin")
     .WithExternalHttpEndpoints();
 
-// Register Consumer Web (Angular app - public search)
-var web = builder.AddNpmApp("web", "../ThriftMedia.Web", "start")
-    .WithHttpEndpoint(port: 5002, env: "PORT")
-    .WithExternalHttpEndpoints()
-    .PublishAsDockerFile();
+// Register Consumer Web (Blazor app - public search)
+var web = builder.AddProject<Projects.ThriftMedia_Web>("web")
+    .WithExternalHttpEndpoints();
 
 // Register Media Processor Worker Service
 var mediaProcessor = builder.AddProject<Projects.ThriftMedia_MediaProcessor>("media-processor")
