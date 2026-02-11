@@ -21,6 +21,7 @@
                           Version="9.4.0" />
         <PackageReference Include="Aspire.Hosting.NodeJs"
                           Version="9.4.0" />
+        <ProjectReference Include="..\ThriftMedia.Admin\ThriftMedia.Admin.csproj" />
         <ProjectReference Include="..\ThriftMedia.Api\ThriftMedia.Api.csproj" />
         <ProjectReference Include="..\ThriftMedia.MediaProcessor\ThriftMedia.MediaProcessor.csproj" />
     </ItemGroup>
