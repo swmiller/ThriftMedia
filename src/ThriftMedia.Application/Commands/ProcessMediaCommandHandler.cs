@@ -1,4 +1,4 @@
-using MediatR;
+using ThriftMedia.Mediator;
 using Microsoft.Extensions.Logging;
 using ThriftMedia.Application.Pipelines;
 using ThriftMedia.Application.Repositories;
