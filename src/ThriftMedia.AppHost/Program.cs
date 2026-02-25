@@ -8,6 +8,9 @@ var postgres = builder.AddPostgres("postgres")
     .WithDataVolume();
 var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
 
+// Add MongoDB for NoSQL support (managed by Aspire)
+var mongo = builder.AddMongoDb("mongo");
+
 // Add Azure Service Bus for media processing queue
 var serviceBus = builder.AddAzureServiceBus("servicebus")
     .RunAsEmulator();
@@ -18,9 +21,10 @@ var blobStorage = builder.AddAzureStorage("storage")
     .RunAsEmulator();
 var mediaImages = blobStorage.AddBlobs("media-images");
 
-// Register API project and reference the database
+// Register API project and reference both SQL and NoSQL databases
 var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
-    .WithReference(thriftMediaDb);
+    .WithReference(thriftMediaDb)
+    .WithReference(mongo);
 
 // Register Admin Portal (Blazor app - store administration)
 var admin = builder.AddProject<Projects.ThriftMedia_Admin>("admin")
@@ -33,6 +37,7 @@ var web = builder.AddProject<Projects.ThriftMedia_Web>("web")
 // Register Media Processor Worker Service
 var mediaProcessor = builder.AddProject<Projects.ThriftMedia_MediaProcessor>("media-processor")
     .WithReference(thriftMediaDb)
+    .WithReference(mongo)
     .WithReference(mediaProcessingQueue)
     .WithReference(mediaImages);
 

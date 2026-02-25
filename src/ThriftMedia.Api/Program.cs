@@ -7,9 +7,21 @@ using ThriftMedia.Infrastructure.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 // Connect to the database
-var connectionString = builder.Configuration.GetConnectionString("ThriftMediaDb");
 builder.Services.AddDbContext<ThriftMediaDbContext>(options =>
-    options.UseNpgsql(connectionString));
+
+// Choose between SQL and NoSQL infrastructure based on configuration
+var useNoSql = builder.Configuration.GetValue<bool>("UseNoSql");
+if (useNoSql)
+{
+    // Register NoSQL infrastructure
+    builder.Services.AddNoSqlInfrastructure(builder.Configuration);
+}
+else
+{
+    var connectionString = builder.Configuration.GetConnectionString("ThriftMediaDb");
+    builder.Services.AddDbContext<ThriftMediaDbContext>(options =>
+        options.UseNpgsql(connectionString));
+}
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
