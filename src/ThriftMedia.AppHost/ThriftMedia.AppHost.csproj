@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-    <Sdk Name="Aspire.AppHost.Sdk"
-         Version="9.0.0" />
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Aspire.AppHost.Sdk/13.1.1">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
@@ -11,16 +9,10 @@
         <UserSecretsId>4a5422ee-d706-42aa-9fac-a41005e32c73</UserSecretsId>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.AppHost"
-                          Version="9.4.0" />
-        <PackageReference Include="Aspire.Hosting.PostgreSQL"
-                          Version="9.4.0" />
-        <PackageReference Include="Aspire.Hosting.Azure.ServiceBus"
-                          Version="9.4.0" />
-        <PackageReference Include="Aspire.Hosting.Azure.Storage"
-                          Version="9.4.0" />
-        <PackageReference Include="Aspire.Hosting.NodeJs"
-                          Version="9.4.0" />
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.1.1" />
+        <PackageReference Include="Aspire.Hosting.Azure.ServiceBus" Version="13.1.1" />
+        <PackageReference Include="Aspire.Hosting.Azure.Storage" Version="13.1.1" />
+        <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.5.2" />
         <ProjectReference Include="..\ThriftMedia.Admin\ThriftMedia.Admin.csproj" />
         <ProjectReference Include="..\ThriftMedia.Api\ThriftMedia.Api.csproj" />
         <ProjectReference Include="..\ThriftMedia.MediaProcessor\ThriftMedia.MediaProcessor.csproj" />
