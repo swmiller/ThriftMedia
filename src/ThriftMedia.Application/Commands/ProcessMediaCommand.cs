@@ -1,4 +1,4 @@
-using MediatR;
+using ThriftMedia.Mediator;
 
 namespace ThriftMedia.Application.Commands;
 

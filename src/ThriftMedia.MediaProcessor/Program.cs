@@ -1,13 +1,14 @@
 using Azure.Messaging.ServiceBus;
 using ThriftMedia.MediaProcessor;
+using ThriftMedia.Mediator;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 // Add service defaults (telemetry, health checks, etc.)
 builder.AddServiceDefaults();
 
-// Add MediatR
-builder.Services.AddMediatR(cfg =>
+// Add Mediator
+builder.Services.AddMediator(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(ThriftMedia.Application.Commands.ProcessMediaCommand).Assembly);
 });

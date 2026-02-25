@@ -22,17 +22,13 @@ var mediaImages = blobStorage.AddBlobs("media-images");
 var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
     .WithReference(thriftMediaDb);
 
-// Register Admin Portal (Angular app - store administration)
-var admin = builder.AddNpmApp("admin", "../ThriftMedia.Admin", "start")
-    .WithHttpEndpoint(port: 5001, env: "PORT")
-    .WithExternalHttpEndpoints()
-    .PublishAsDockerFile();
+// Register Admin Portal (Blazor app - store administration)
+var admin = builder.AddProject<Projects.ThriftMedia_Admin>("admin")
+    .WithExternalHttpEndpoints();
 
-// Register Consumer Web (Angular app - public search)
-var web = builder.AddNpmApp("web", "../ThriftMedia.Web", "start")
-    .WithHttpEndpoint(port: 5002, env: "PORT")
-    .WithExternalHttpEndpoints()
-    .PublishAsDockerFile();
+// Register Consumer Web (Blazor app - public search)
+var web = builder.AddProject<Projects.ThriftMedia_Web>("web")
+    .WithExternalHttpEndpoints();
 
 // Register Media Processor Worker Service
 var mediaProcessor = builder.AddProject<Projects.ThriftMedia_MediaProcessor>("media-processor")

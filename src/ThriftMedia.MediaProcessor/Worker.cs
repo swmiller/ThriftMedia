@@ -1,5 +1,5 @@
 using Azure.Messaging.ServiceBus;
-using MediatR;
+using ThriftMedia.Mediator;
 using System.Text.Json;
 using ThriftMedia.Application.Commands;
 
