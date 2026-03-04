@@ -25,8 +25,8 @@ ThriftMedia is a distributed application for managing and browsing media invento
 ## Features
 - Public media browsing (no authentication required)
 - Admin UI (future) for thrift store inventory management
-- Modern .NET patterns: CQRS, MediatR, FluentValidation, XUnit
-- Cloud-native with .NET Aspire
+- Modern .NET patterns: CQRS with custom mediator (ThriftMedia.Mediator), FluentValidation, XUnit
+- On-premise deployment with .NET Aspire and Docker containers
 
 ## Contributing
 - See `.github/copilot-instructions.md` for coding standards

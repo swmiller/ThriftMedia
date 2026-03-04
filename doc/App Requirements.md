@@ -86,7 +86,6 @@ The business owner administration website provides secure access for store owner
 #### 2.2.1 Authentication and Access Control
 
 - Secure login for business owners via OAuth 2.0
-- Multi-factor authentication (MFA) support for enhanced security
 - Access management for multiple business team members
 - Role-based permissions (Owner, Manager, Editor, Viewer)
 
@@ -223,14 +222,9 @@ The data ingestion backend is a critical component that processes all media uplo
 
 These requirements apply across all components of the ThriftMedia platform.
 
-#### 2.5.1 Internationalization
+**Note**: Initial release targets US English only. Multi-language support may be considered for future releases.
 
-- Multi-language support for key user interfaces
-- Language selection preference storage
-- Right-to-left (RTL) language support
-- Localized content and currency formatting
-
-#### 2.5.2 Accessibility
+#### 2.5.1 Accessibility
 
 - Accessibility compliance with WCAG 2.1 Level AA or higher
 - Screen reader compatibility
@@ -238,14 +232,14 @@ These requirements apply across all components of the ThriftMedia platform.
 - Color contrast compliance
 - Alternative text for images and media
 
-#### 2.5.3 Audit and Compliance
+#### 2.5.2 Audit and Compliance
 
 - Comprehensive audit trails for critical actions
 - User activity logging for security and compliance
 - Data retention policies
 - GDPR and privacy regulation compliance features
 
-#### 2.5.4 Monitoring and Observability
+#### 2.5.3 Monitoring and Observability
 
 - Logging and monitoring of user activities for security and performance
 - Application performance monitoring (APM)
@@ -315,7 +309,6 @@ All development must adhere to OWASP Top Ten security principles:
 #### 3.2.2 Authentication & Session Management
 
 - Enforce strong password policies (minimum length, complexity requirements)
-- Multi-factor authentication (MFA) implementation and encouragement
 - Secure password storage using industry-standard hashing (bcrypt, Argon2)
 - Secure session handling with appropriate timeouts
 
@@ -389,7 +382,7 @@ The system must meet the following performance benchmarks:
 #### 3.3.2 Scalability
 
 - Support at least 10,000 concurrent users across all platforms
-- Scalable cloud-based infrastructure with load balancing
+- Scalable containerized infrastructure with load balancing (Docker-based deployment)
 - Auto-scaling capabilities based on demand
 - Horizontal scaling for all stateless services
 
@@ -491,7 +484,6 @@ The system must meet the following performance benchmarks:
 - **CSRF**: Cross-Site Request Forgery
 - **CSP**: Content Security Policy
 - **GDPR**: General Data Protection Regulation
-- **MFA**: Multi-Factor Authentication
 - **OAuth**: Open Authorization
 - **ORM**: Object-Relational Mapping
 - **OWASP**: Open Web Application Security Project

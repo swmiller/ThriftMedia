@@ -39,7 +39,7 @@ RATIONALE:
 
 ### 2. **Application Layer Bypass - CRITICAL**
 
-**Problem:** API endpoints directly inject and use `DbContext` instead of going through Application layer (Commands/Queries via MediatR).
+**Problem:** API endpoints directly inject and use `DbContext` instead of going through Application layer (Commands/Queries via mediator pattern).
 
 **Evidence:**
 ```csharp
@@ -80,7 +80,7 @@ public class MediaController : ControllerBase
 ```
 PHASE 2 (After Phase 1):
 1. Create proper Command/Query classes in Application layer
-2. Implement handlers using MediatR pattern
+2. Implement handlers using ThriftMedia.Mediator (custom mediator pattern)
 3. Add FluentValidation validators for all commands
 4. Refactor ALL API endpoints to use IMediator
 5. Add integration tests for each handler
@@ -125,16 +125,16 @@ DECISION NEEDED: Consult with team, but Option A is simpler and follows modern E
 
 **Gap Analysis:**
 
-| Requirement | Status | Priority |
-|------------|--------|----------|
-| OAuth 2.0 authentication | ❌ Not Started | CRITICAL |
-| TLS 1.2+ encryption | ✅ Handled by hosting | LOW |
-| Data at rest encryption | ⚠️ Database level | MEDIUM |
-| Input validation | ❌ Not implemented | HIGH |
-| Rate limiting | ❌ Not implemented | HIGH |
-| Session management | ❌ Not started | HIGH |
-| Security logging | ❌ Minimal logging | MEDIUM |
-| OWASP Top 10 compliance | ❌ Not addressed | HIGH |
+| Requirement              | Status               | Priority |
+| ------------------------ | -------------------- | -------- |
+| OAuth 2.0 authentication | ❌ Not Started        | CRITICAL |
+| TLS 1.2+ encryption      | ✅ Handled by hosting | LOW      |
+| Data at rest encryption  | ⚠️ Database level     | MEDIUM   |
+| Input validation         | ❌ Not implemented    | HIGH     |
+| Rate limiting            | ❌ Not implemented    | HIGH     |
+| Session management       | ❌ Not started        | HIGH     |
+| Security logging         | ❌ Minimal logging    | MEDIUM   |
+| OWASP Top 10 compliance  | ❌ Not addressed      | HIGH     |
 
 **Recommendation:**
 ```
@@ -202,17 +202,17 @@ TEST STRATEGY:
 
 **Status by Project:**
 
-| Project | Status | Completeness | Critical Issues |
-|---------|--------|--------------|-----------------|
-| ThriftMedia.Domain | ✅ Good | 80% | Address verification stub |
-| ThriftMedia.Application | ⚠️ Exists but unused | 10% | Not wired up to API |
-| ThriftMedia.Infrastructure | ✅ Good | 70% | Needs repository implementation |
-| ThriftMedia.Api | ⚠️ Works but wrong | 40% | Bypasses architecture |
-| ThriftMedia.Admin | ❌ Empty shell | 5% | Needs full implementation |
-| ThriftMedia.Web | ❌ Empty shell | 5% | Needs full implementation |
-| ThriftMedia.MediaProcessor | ⚠️ Stub | 20% | Processing logic missing |
-| ThriftMedia.Contracts | ❌ Empty | 0% | No DTOs defined |
-| ThriftMedia.Data | ❌ Should delete | N/A | Conflicting with Infrastructure |
+| Project                    | Status              | Completeness | Critical Issues                 |
+| -------------------------- | ------------------- | ------------ | ------------------------------- |
+| ThriftMedia.Domain         | ✅ Good              | 80%          | Address verification stub       |
+| ThriftMedia.Application    | ⚠️ Exists but unused | 10%          | Not wired up to API             |
+| ThriftMedia.Infrastructure | ✅ Good              | 70%          | Needs repository implementation |
+| ThriftMedia.Api            | ⚠️ Works but wrong   | 40%          | Bypasses architecture           |
+| ThriftMedia.Admin          | ❌ Empty shell       | 5%           | Needs full implementation       |
+| ThriftMedia.Web            | ❌ Empty shell       | 5%           | Needs full implementation       |
+| ThriftMedia.MediaProcessor | ⚠️ Stub              | 20%          | Processing logic missing        |
+| ThriftMedia.Contracts      | ❌ Empty             | 0%           | No DTOs defined                 |
+| ThriftMedia.Data           | ❌ Should delete     | N/A          | Conflicting with Infrastructure |
 
 **Recommendation:**
 ```
@@ -404,13 +404,7 @@ ADD TO ServiceDefaults PROJECT:
 
 **Recommendation:** Integrate with Google Maps API or OpenStreetMap for address validation.
 
-### 12. **Multi-Language Support**
-
-**Requirement:** Multi-language support mentioned in REQUIREMENTS.md.
-
-**Recommendation:** Use ASP.NET Core localization. Defer until after Phase 4 (UIs complete).
-
-### 13. **Accessibility Compliance**
+### 12. **Accessibility Compliance**
 
 **Requirement:** WCAG 2.1 compliance required.
 
@@ -549,13 +543,13 @@ ADD TO ServiceDefaults PROJECT:
 
 ### Test Coverage Goals
 
-| Layer | Current | Target | Strategy |
-|-------|---------|--------|----------|
-| Domain | ~80% | 90% | Unit tests for all entities |
-| Application | ~0% | 85% | Test all handlers, validators |
-| Infrastructure | ~0% | 70% | Integration tests with TestContainers |
-| API | ~5% | 80% | Integration tests via HttpClient |
-| UI | ~0% | 60% | Component tests (bUnit) |
+| Layer          | Current | Target | Strategy                              |
+| -------------- | ------- | ------ | ------------------------------------- |
+| Domain         | ~80%    | 90%    | Unit tests for all entities           |
+| Application    | ~0%     | 85%    | Test all handlers, validators         |
+| Infrastructure | ~0%     | 70%    | Integration tests with TestContainers |
+| API            | ~5%     | 80%    | Integration tests via HttpClient      |
+| UI             | ~0%     | 60%    | Component tests (bUnit)               |
 
 ### Test Types
 
@@ -609,20 +603,21 @@ ADD TO ServiceDefaults PROJECT:
 
 **Recommendation:** Option 1 (Direct mapping) for simplicity and modern EF Core capabilities.
 
-### ADR-003: MediatR Replacement
+### ADR-003: Custom Mediator Pattern Implementation
 
 **Status:** Accepted
 
-**Context:** MediatR licensing changed. Custom implementation created.
+**Context:** Need CQRS implementation without external paid dependencies. MediatR transitioned to paid licensing.
 
-**Decision:** Use custom ThriftMedia.Mediator with API-compatible interface.
+**Decision:** Use custom ThriftMedia.Mediator implementation that provides mediator pattern functionality.
 
 **Consequences:**
-- ✅ No licensing costs
+- ✅ No licensing costs or external dependencies
 - ✅ Full control over implementation
-- ✅ API-compatible with MediatR
+- ✅ API-compatible interface (IMediator, IRequest, INotification)
+- ✅ Supports both request/response and notification patterns
 - ⚠️ Need to maintain custom code
-- ⚠️ Missing advanced MediatR features (pipeline behaviors)
+- ⚠️ Advanced features (pipeline behaviors, validation pipelines) must be implemented as needed
 
 ### ADR-004: Authentication Strategy
 
@@ -641,7 +636,6 @@ ADD TO ServiceDefaults PROJECT:
 **Consequences:**
 - ✅ Industry-standard OAuth 2.0
 - ✅ Self-hosted, no cloud dependency
-- ✅ Built-in MFA support available
 - ✅ Full control over user data
 - ⚠️ Requires hosting and maintenance
 
@@ -649,14 +643,14 @@ ADD TO ServiceDefaults PROJECT:
 
 ## Risks and Mitigation
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Architecture refactor breaks existing functionality | HIGH | HIGH | Comprehensive test suite before refactoring |
-| OAuth 2.0 integration complexity | MEDIUM | MEDIUM | Use Microsoft.Identity.Web, follow samples |
-| Performance requirements not met | MEDIUM | HIGH | Load testing in Phase 5, database optimization |
-| Security audit failures | MEDIUM | CRITICAL | Address OWASP Top 10 in Phase 2 |
-| Timeline delays | HIGH | MEDIUM | Prioritize ruthlessly, defer non-critical features |
-| Docker dependency issues | LOW | LOW | Ensure Docker Desktop runs, or use Podman |
+| Risk                                                | Probability | Impact   | Mitigation                                         |
+| --------------------------------------------------- | ----------- | -------- | -------------------------------------------------- |
+| Architecture refactor breaks existing functionality | HIGH        | HIGH     | Comprehensive test suite before refactoring        |
+| OAuth 2.0 integration complexity                    | MEDIUM      | MEDIUM   | Use Microsoft.Identity.Web, follow samples         |
+| Performance requirements not met                    | MEDIUM      | HIGH     | Load testing in Phase 5, database optimization     |
+| Security audit failures                             | MEDIUM      | CRITICAL | Address OWASP Top 10 in Phase 2                    |
+| Timeline delays                                     | HIGH        | MEDIUM   | Prioritize ruthlessly, defer non-critical features |
+| Docker dependency issues                            | LOW         | LOW      | Ensure Docker Desktop runs, or use Podman          |
 
 ---
 

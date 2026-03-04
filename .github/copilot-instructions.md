@@ -18,6 +18,11 @@
   - Avoid unnecessary abstractions and over-engineering.
   - Apply a **pragmatic approach** - extract common patterns only when duplication becomes problematic.
 - Implement **CQRS (Command Query Responsibility Segregation)** to separate read and write concerns.
+- Use **ThriftMedia.Mediator** (custom mediator pattern implementation) for CQRS:
+  - Use `IMediator` interface for sending commands/queries and publishing events
+  - Implement `IRequestHandler<TRequest, TResponse>` for command/query handlers
+  - Implement `INotificationHandler<TNotification>` for event handlers
+  - This is a custom implementation (not MediatR) - see `src/ThriftMedia.Mediator/README.md`
 - Use **FluentValidation** for model validation, ensuring clean and maintainable validation logic.
 - Use **.NET Aspire** for app hosting and configuration, ensuring a clean separation of concerns.
 - Avoid using "AutoMapper". Instead generate "To" methods when the source object needs to be mapped to a different object type.
