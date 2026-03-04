@@ -12,12 +12,29 @@
   - LINQ for efficient data manipulation.
   - Comprehensive unit and integration testing.
   - Secure coding practices following OWASP guidelines.
+- Use **Vertical Slice Architecture** to organize features by business capability rather than technical concerns:
+  - Each feature (slice) contains all layers needed for that specific functionality.
+  - Keep related code together: API endpoint, command/query, handler, validation, and data access.
+  - Avoid unnecessary abstractions and over-engineering.
+  - Apply a **pragmatic approach** - extract common patterns only when duplication becomes problematic.
 - Implement **CQRS (Command Query Responsibility Segregation)** to separate read and write concerns.
-- Use **MediatR for command and query handling**, ensuring decoupled communication between components.
 - Use **FluentValidation** for model validation, ensuring clean and maintainable validation logic.
 - Use **.NET Aspire** for app hosting and configuration, ensuring a clean separation of concerns.
 - Avoid using "AutoMapper". Instead generate "To" methods when the source object needs to be mapped to a different object type.
 - Use **Blazor** for building interactive web UIs, leveraging its component model.
-- Use Microsoft SQL Server as the database, ensuring efficient data storage and retrieval.
+- Use **PostgreSQL** as the database, ensuring efficient data storage and retrieval.
 - Use **Entity Framework Core** for data access, ensuring efficient and maintainable database interactions.
 - Use **Bootstrap** for web site layout and styling, ensuring responsive and consistent UI design.
+- Use **Docker containers** for all services in development and deployment:
+  - All infrastructure components (PostgreSQL, RabbitMQ, MinIO) run as containers.
+  - All application services run as containers for consistent environments.
+  - Managed by .NET Aspire for orchestration.
+  - Enables on-premise Linux deployment without cloud dependencies.
+- Use **RabbitMQ** for message queuing and asynchronous processing.
+- Use **MinIO** for S3-compatible object storage for media files.
+- Use **Akka.NET** and the **Actor Pattern** for backend processing, pipelines, and worker services:
+  - APIs and controllers use standard ASP.NET Core patterns (not actors).
+  - Background processing, media pipelines, and long-running tasks use Akka.NET actors.
+  - Actors provide message-driven, scalable, and resilient processing.
+  - Each processing step is implemented as an actor for isolation and fault tolerance.
+- **Deployment**: All components are containerized and deploy to on-premise Linux servers using Docker.

@@ -8,23 +8,22 @@ var postgres = builder.AddPostgres("postgres")
     .WithDataVolume();
 var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
 
-// Add MongoDB for NoSQL support (managed by Aspire)
-var mongo = builder.AddMongoDb("mongo");
+// Add RabbitMQ for message queue (on-premise, containerized)
+var rabbitmq = builder.AddRabbitMQ("messaging")
+    .WithDataVolume();
 
-// Add Azure Service Bus for media processing queue
-var serviceBus = builder.AddAzureServiceBus("servicebus")
-    .RunAsEmulator();
-var mediaProcessingQueue = serviceBus.AddServiceBusQueue("media-processing");
+// Add MinIO for object storage (on-premise, S3-compatible, containerized)
+var minio = builder.AddContainer("minio", "minio/minio")
+    .WithEndpoint(port: 9000, targetPort: 9000, name: "api")
+    .WithEndpoint(port: 9001, targetPort: 9001, name: "console")
+    .WithArgs("server", "/data", "--console-address", ":9001")
+    .WithEnvironment("MINIO_ROOT_USER", "minioadmin")
+    .WithEnvironment("MINIO_ROOT_PASSWORD", "minioadmin")
+    .WithVolume("minio-data", "/data");
 
-// Add Azure Blob Storage for media images
-var blobStorage = builder.AddAzureStorage("storage")
-    .RunAsEmulator();
-var mediaImages = blobStorage.AddBlobs("media-images");
-
-// Register API project and reference both SQL and NoSQL databases
+// Register API project and reference PostgreSQL database
 var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
-    .WithReference(thriftMediaDb)
-    .WithReference(mongo);
+    .WithReference(thriftMediaDb);
 
 // Register Admin Portal (Blazor app - store administration)
 var admin = builder.AddProject<Projects.ThriftMedia_Admin>("admin")
@@ -34,11 +33,12 @@ var admin = builder.AddProject<Projects.ThriftMedia_Admin>("admin")
 var web = builder.AddProject<Projects.ThriftMedia_Web>("web")
     .WithExternalHttpEndpoints();
 
-// Register Media Processor Worker Service
+// Register Media Processor Worker Service (uses Akka.NET actors for backend processing)
 var mediaProcessor = builder.AddProject<Projects.ThriftMedia_MediaProcessor>("media-processor")
     .WithReference(thriftMediaDb)
-    .WithReference(mongo)
-    .WithReference(mediaProcessingQueue)
-    .WithReference(mediaImages);
+    .WithReference(rabbitmq)
+    .WithEnvironment("MinIO__Endpoint", "localhost:9000")
+    .WithEnvironment("MinIO__AccessKey", "minioadmin")
+    .WithEnvironment("MinIO__SecretKey", "minioadmin");
 
 builder.Build().Run();

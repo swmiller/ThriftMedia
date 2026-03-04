@@ -140,7 +140,7 @@ DECISION NEEDED: Consult with team, but Option A is simpler and follows modern E
 ```
 PHASE 3 (Security Foundation):
 1. Implement OAuth 2.0 using Microsoft.Identity.Web
-   - Support Azure AD B2C or IdentityServer
+   - Support IdentityServer or Keycloak for on-premise deployment
    - Separate consumer vs business owner authentication
    
 2. Add ASP.NET Core Identity
@@ -338,18 +338,20 @@ public static class MediaMappingExtensions
 ```
 OPTIONS:
 
-1. Azure Content Moderator (Recommended)
-   - Image moderation
-   - Text moderation
-   - Built-in profanity/violence detection
+1. Open-Source Content Moderation (Recommended for On-Prem)
+   - NSFW.js for image moderation
+   - Perspective API or local ML models for text moderation
+   - Self-hosted, no cloud dependency
    
-2. AWS Rekognition + Comprehend
-   - Similar capabilities
-   - May be cheaper at scale
+2. Third-Party API Services
+   - Sightengine or similar content moderation API
+   - Pay-per-use pricing
+   - Requires internet connectivity
    
 3. Manual moderation queue
    - Store owners review before publishing
    - Admin override capability
+   - No external dependencies
    
 IMPLEMENTATION:
 - Call moderation service in MediaProcessor worker
@@ -373,7 +375,7 @@ IMPLEMENTATION:
 ADD TO ServiceDefaults PROJECT:
 
 1. Serilog Configuration
-   - Log to console, file, and Application Insights
+   - Log to console, file, and Seq (self-hosted log aggregation)
    - Structured logging format
    - Include correlation IDs
    
@@ -383,8 +385,8 @@ ADD TO ServiceDefaults PROJECT:
    
 3. Health Checks
    - Database connectivity
-   - Azure Service Bus connection
-   - Blob storage availability
+   - RabbitMQ connection
+   - MinIO storage availability
    
 4. Metrics
    - Request duration
@@ -400,7 +402,7 @@ ADD TO ServiceDefaults PROJECT:
 
 **Location:** `Store.cs` has TODO comment for address verification.
 
-**Recommendation:** Integrate with Google Maps API or Azure Maps for address validation.
+**Recommendation:** Integrate with Google Maps API or OpenStreetMap for address validation.
 
 ### 12. **Multi-Language Support**
 
@@ -426,7 +428,7 @@ ADD TO ServiceDefaults PROJECT:
 - Use .NET MAUI for cross-platform (iOS + Android)
 - Share Contracts project with mobile app
 - Implement offline-first architecture
-- Use Azure Mobile Apps or similar for sync
+- Use local SQLite for offline sync
 
 ---
 
@@ -466,7 +468,7 @@ ADD TO ServiceDefaults PROJECT:
 
 **Week 3:**
 - [ ] Implement OAuth 2.0 authentication
-  - Choose provider (Azure AD B2C recommended)
+  - Choose provider (IdentityServer or Keycloak for on-premise)
   - Configure authentication middleware
   - Add user roles (Consumer, StoreOwner, Admin)
 - [ ] Add authorization policies
@@ -628,18 +630,20 @@ ADD TO ServiceDefaults PROJECT:
 
 **Context:** OAuth 2.0 required for both public and admin interfaces.
 
-**Decision:** Use Azure AD B2C with separate user flows for consumers vs business owners.
+**Decision:** Use IdentityServer or Keycloak for on-premise OAuth 2.0 authentication with separate user flows for consumers vs business owners.
 
 **Alternatives Considered:**
-- IdentityServer4 (deprecated)
-- Auth0 (additional cost)
-- AWS Cognito (vendor lock-in)
+- Auth0 (cloud-based, additional cost)
+- Keycloak (open-source, self-hosted)
+- IdentityServer (open-source, .NET native)
+- ASP.NET Core Identity standalone (limited OAuth features)
 
 **Consequences:**
 - ✅ Industry-standard OAuth 2.0
-- ✅ Microsoft ecosystem integration
-- ✅ Built-in MFA support
-- ⚠️ Azure dependency
+- ✅ Self-hosted, no cloud dependency
+- ✅ Built-in MFA support available
+- ✅ Full control over user data
+- ⚠️ Requires hosting and maintenance
 
 ---
 
@@ -790,11 +794,12 @@ dotnet security-scan ThriftMedia.sln
                 │  │  PostgreSQL     │  │
                 │  └─────────────────┘  │
                 │  ┌─────────────────┐  │
-                │  │  Azure Service  │  │
-                │  │  Bus            │  │
+                │  │  RabbitMQ       │  │
+                │  │  (Message Queue)│  │
                 │  └─────────────────┘  │
                 │  ┌─────────────────┐  │
-                │  │  Blob Storage   │  │
+                │  │  MinIO          │  │
+                │  │  (Object Store) │  │
                 │  └─────────────────┘  │
                 └───────────────────────┘
 ```

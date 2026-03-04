@@ -56,7 +56,7 @@ ThriftMedia is a digital platform designed to connect businesses and consumers t
 - Implement rate limiting and account lockout to prevent brute-force attacks.
 - Comprehensive logging of security events and anomaly detection.
 #### 3.2 Secure Coding Practices (OWASP Top Ten Emphasis)
-- Injection Prevention: Use parameterized queries and ORM frameworks to avoid SQL, NoSQL, and command injection vulnerabilities.
+- Injection Prevention: Use parameterized queries and ORM frameworks to avoid SQL and command injection vulnerabilities.
 - Authentication & Session Management: Enforce strong password policies, multi-factor authentication, and secure session handling.
 - Sensitive Data Exposure: Ensure all sensitive information is encrypted and never logged in plaintext.
 - XML External Entities (XXE) Protection: Disable external entity processing and validate XML inputs.

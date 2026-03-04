@@ -8,7 +8,6 @@ ThriftMedia is a distributed application for managing and browsing media invento
 - **src/ThriftMedia.Api**: Public API for media browsing and data access
 - **src/ThriftMedia.AppHost**: Aspire distributed application orchestrator
 - **src/ThriftMedia.ServiceDefaults**: Shared service configuration and defaults
-- **src/ThriftMedia.Infrastructure.NoSql**: NoSQL-specific infrastructure, repositories, and configuration
 - **.github/**: Project instructions, workflows, and documentation
 
 ## Getting Started

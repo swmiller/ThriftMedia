@@ -1,7 +1,7 @@
 # Media Ingestion Pipeline - Implementation Summary
 
 ## Overview
-The media ingestion pipeline has been stubbed out with a complete architecture for processing uploaded media images through OCR, classification, content moderation, and catalog listing.
+The media ingestion pipeline uses **Akka.NET actors** for processing uploaded media images through OCR, classification, content moderation, and catalog listing. The actor pattern provides message-driven, scalable, and resilient processing with built-in supervision and fault tolerance.
 
 ## Components Created
 
@@ -24,17 +24,20 @@ The media ingestion pipeline has been stubbed out with a complete architecture f
 
 ### Application Layer (ThriftMedia.Application)
 
-4. **Pipeline Infrastructure** (`Pipelines/`)
-   - `IMediaProcessingStep` - Interface for extensible pipeline steps
-   - `MediaProcessingContext` - Context object with metadata bag
-   - `MediaProcessingResult` - Result object for success/failure
-   - `MediaProcessingPipeline` - Orchestrator that executes steps sequentially
+4. **Pipeline Actors** (`Pipelines/Actors/`)
+   - `MediaProcessingCoordinatorActor` - Orchestrates the processing pipeline
+   - `OcrProcessingActor` - Handles OCR processing tasks
+   - `MediaClassificationActor` - Performs media type classification
+   - `ContentModerationActor` - Executes content moderation checks
+   - `CatalogListingActor` - Manages catalog listing operations
+   - Each actor runs independently with supervision for fault tolerance
 
-5. **Processing Steps** (`Pipelines/Steps/`)
-   - `OcrProcessingStep` - Calls OCR service and stores results
-   - `MediaClassificationStep` - Determines media type from OCR data
-   - `ContentModerationStep` - Detects explicit content and flags store
-   - `CatalogListingStep` - Lists media if all validations pass
+5. **Actor Messages** (`Pipelines/Messages/`)
+   - `ProcessMediaMessage` - Initiates media processing
+   - `OcrCompletedMessage` - OCR results
+   - `ClassificationCompletedMessage` - Classification results
+   - `ModerationCompletedMessage` - Moderation results
+   - `ListingCompletedMessage` - Listing confirmation
 
 6. **Service Interfaces** (`Services/`)
    - `IOcrService` - OCR processing
@@ -46,57 +49,75 @@ The media ingestion pipeline has been stubbed out with a complete architecture f
    - `IStoreRepository` - Store persistence
 
 8. **CQRS Commands** (`Commands/`)
-   - `ProcessMediaCommand` - Command to process media
-   - `ProcessMediaCommandHandler` - MediatR handler for pipeline execution
+   - `ProcessMediaCommand` - Command to initiate media processing
+   - `ProcessMediaCommandHandler` - Sends message to actor system
 
 ### Worker Service (ThriftMedia.MediaProcessor)
 
-9. **Background Processor**
-   - `MediaProcessorWorker` - Listens to Azure Service Bus queue
-   - Deserializes messages and dispatches to MediatR
-   - Handles message completion and dead-lettering
-   - Configured for Service Bus integration
+9. **Akka.NET Actor System**
+   - `MediaProcessorWorker` - Hosts Akka.NET actor system
+   - Listens to RabbitMQ message queue
+   - Routes messages to `MediaProcessingCoordinatorActor`
+   - Manages actor lifecycle and supervision strategies
+   - Configured for distributed processing and fault tolerance
 
 ## Pipeline Flow
 
 ```
-Upload → Service Bus Queue → Worker Service
+Upload → RabbitMQ Queue → Worker Service
                               ↓
-                        MediatR Command Handler
+                     Actor System Entry
                               ↓
-                     Processing Pipeline
+              MediaProcessingCoordinatorActor
                               ↓
         ┌────────────────────┴────────────────────┐
         ↓                    ↓                    ↓
-   OCR Step          Classification      Content Moderation
+   OcrProcessing      Classification      ContentModeration
+      Actor               Actor                 Actor
         ↓                    ↓                    ↓
         └────────────────────┬────────────────────┘
                              ↓
-                      Catalog Listing
+                   CatalogListingActor
                              ↓
-                    Database (Listed/Flagged)
+                  PostgreSQL Database
 ```
+
+## Actor System Design
+
+The pipeline uses Akka.NET actors for:
+- **Message-driven processing**: Actors communicate via immutable messages
+- **Supervision**: Parent actors supervise child actors, restarting on failure
+- **Isolation**: Each processing step runs in its own actor for fault isolation
+- **Scalability**: Actors can be distributed across multiple nodes
+- **Resilience**: Built-in retry and error handling through supervision strategies
 
 ## Extensibility
 
-The pipeline is designed for easy extension:
-- New processing steps implement `IMediaProcessingStep`
-- Steps are registered via DI and executed in order
-- Context metadata bag allows steps to share data
-- Each step can succeed/fail independently
+The actor-based pipeline is designed for easy extension:
+- New processing actors can be added to the supervision hierarchy
+- Actors communicate via messages, enabling loose coupling
+- Actor behavior can be modified without affecting other actors
+- Supervision strategies handle failures independently per actor
 
 ## Next Steps (Implementation Required)
 
 1. **Infrastructure Layer**
-   - Implement `IOcrService` (Azure Vision or EasyOCR microservice)
+   - Implement `IOcrService` (Tesseract OCR or EasyOCR)
    - Implement `IMediaClassificationService` (ML model or rule-based)
-   - Implement `IContentModerationService` (Azure Content Safety)
+   - Implement `IContentModerationService` (open-source content moderation library)
    - Implement repositories with EF Core
+
+2. **Actor System Implementation**
+   - Create actor hierarchy with supervision strategies
+   - Define message protocols between actors
+   - Implement actor behaviors for each processing step
+   - Configure actor persistence for stateful operations
 
 2. **AppHost Configuration**
    - Add MediaProcessor to Aspire AppHost
-   - Configure Service Bus connection
-   - Wire up dependencies
+   - Configure RabbitMQ connection
+   - Wire up Akka.NET dependencies
+   - Configure actor system settings
 
 3. **API Endpoints**
    - Media upload endpoint
@@ -104,8 +125,8 @@ The pipeline is designed for easy extension:
    - Status checking endpoints
 
 4. **Testing**
-   - Unit tests for each pipeline step
-   - Integration tests for full pipeline
-   - Worker service tests
+   - Unit tests for actor behaviors using `TestKit`
+   - Integration tests for actor message flows
+   - Worker service tests with mock actor system
 
-All components follow TDD principles, CQRS pattern with MediatR, and .NET best practices as specified in the project guidelines.
+All components follow TDD principles, CQRS pattern, vertical slice architecture, and .NET best practices. Backend processing uses **Akka.NET actors** for scalable, resilient, message-driven architecture. Data is stored in **PostgreSQL** using Entity Framework Core.
