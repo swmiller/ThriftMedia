@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using ThriftMedia.Data.Models;
+using ThriftMedia.Infrastructure.Persistence.Models;
 
 namespace ThriftMedia.Infrastructure.Persistence;
 

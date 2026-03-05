@@ -1,38 +1,33 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using ThriftMedia.Application.Queries;
 using ThriftMedia.Contracts.Dto;
+using ThriftMedia.Mediator;
 
 public static class MediaEndpoints
 {
     public static IEndpointRouteBuilder MapMediaEndpoints(this IEndpointRouteBuilder endpoints)
     {
         // Get all media
-        endpoints.MapGet("/media", () => new[]
+        endpoints.MapGet("/media", async (IMediator mediator) =>
         {
-            new MediaDto(1, "The Great Gatsby", "Book", "A classic novel."),
-            new MediaDto(2, "Abbey Road", "Vinyl", "The Beatles album."),
-            new MediaDto(3, "Casablanca", "DVD", "Classic film.")
+            var media = await mediator.Send(new GetAllMediaQuery());
+            return Results.Ok(media);
         });
 
-        // Get media by ID
-        endpoints.MapGet("/media/{id:int}", (int id) =>
+
+        // Get media by ID - TODO: Implement GetMediaByIdQuery
+        endpoints.MapGet("/media/{id:guid}", (Guid id) =>
         {
-            var media = new[]
-            {
-                new MediaDto(1, "The Great Gatsby", "Book", "A classic novel."),
-                new MediaDto(2, "Abbey Road", "Vinyl", "The Beatles album."),
-                new MediaDto(3, "Casablanca", "DVD", "Classic film.")
-            };
-            return media.FirstOrDefault(m => m.Id == id) is MediaDto found
-                ? Results.Ok(found)
-                : Results.NotFound();
+            // Placeholder - implement GetMediaByIdQuery handler
+            return Results.NotFound();
         });
 
-        // Add new media (fake, does not persist)
+        // Add new media - TODO: Implement CreateMediaCommand
         endpoints.MapPost("/media", (MediaDto media) =>
         {
-            // In a real app, save to DB
-            return Results.Created($"/media/{media.Id}", media);
+            // Placeholder - implement CreateMediaCommand handler
+            return Results.StatusCode(501); // Not Implemented
         });
 
         return endpoints;

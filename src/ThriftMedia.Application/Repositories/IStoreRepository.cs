@@ -8,5 +8,6 @@ namespace ThriftMedia.Application.Repositories;
 public interface IStoreRepository
 {
     Task<Store?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Store>> GetAllAsync(CancellationToken cancellationToken = default);
     Task UpdateAsync(Store store, CancellationToken cancellationToken = default);
 }

@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ThriftMedia.Data.Models; // DbContext resides in Data.Models
+using ThriftMedia.Application.Repositories;
 using ThriftMedia.Domain.Services;
+using ThriftMedia.Infrastructure.Persistence.Models;
 using ThriftMedia.Infrastructure.Repositories;
 using ThriftMedia.Infrastructure.Services;
 
@@ -17,7 +18,14 @@ public static class ServiceCollectionExtensions
 
         services.AddDbContext<ThriftMediaDbContext>(options => options.UseNpgsql(connectionString));
 
+        // Register generic repository
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+        // Register specific repositories
+        services.AddScoped<IMediaRepository, MediaRepository>();
+        services.AddScoped<IStoreRepository, StoreRepository>();
+
+        // Register domain services
         services.AddScoped<IMediaModerationService, MediaModerationService>();
 
         return services;

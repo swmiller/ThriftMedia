@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ThriftMedia.Data.Models;
+namespace ThriftMedia.Infrastructure.Persistence.Models;
 
 public class Address
 {

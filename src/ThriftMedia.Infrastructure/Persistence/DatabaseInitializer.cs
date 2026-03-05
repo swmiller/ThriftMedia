@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ThriftMedia.Data.Models;
+using ThriftMedia.Infrastructure.Persistence.Models;
 
 namespace ThriftMedia.Infrastructure.Persistence;
 

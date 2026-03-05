@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ThriftMedia.Data.Models;
+namespace ThriftMedia.Infrastructure.Persistence.Models;
 
 public partial class Store
 {

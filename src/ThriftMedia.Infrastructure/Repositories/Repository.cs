@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using ThriftMedia.Data.Models; // DbContext and entities
+using ThriftMedia.Infrastructure.Persistence.Models;
 
 namespace ThriftMedia.Infrastructure.Repositories;
 

@@ -1,14 +1,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using ThriftMedia.Data.Models;
+using ThriftMedia.Application.Queries;
+using ThriftMedia.Mediator;
 
 public static class StoreOwnerEndpoints
 {
     public static IEndpointRouteBuilder MapStoreOwnerEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/storeowners", async (ThriftMediaDbContext db) =>
-            await db.Stores.AsNoTracking().ToListAsync());
+        // Get all stores
+        endpoints.MapGet("/storeowners", async (IMediator mediator) =>
+        {
+            var stores = await mediator.Send(new GetAllStoresQuery());
+            return Results.Ok(stores);
+        });
 
         //// Get all store owners
         //endpoints.MapGet("/storeowners", async (ThriftMediaDbContext db) =>

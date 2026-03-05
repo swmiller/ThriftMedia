@@ -1,15 +1,20 @@
 using System;
 using System.Collections.Generic;
 
-namespace ThriftMedia.Data.Models;
+namespace ThriftMedia.Infrastructure.Persistence.Models;
 
 public partial class Media
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public int StoreId { get; set; }
     public string Type { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
     public string ImageUri { get; set; } = string.Empty;
     public string? OcrPayloadJson { get; set; }
+    public string? Title { get; set; }
+    public string? Author { get; set; }
+    public string? Description { get; set; }
+    public decimal? Price { get; set; }
     public bool IsExplicitContent { get; set; }
     public string CreatedBy { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
