@@ -9,8 +9,7 @@
 ThriftMedia is a digital platform designed to connect businesses and consumers through curated media experiences. The solution consists of several interconnected components:
 
 - **Public-Facing Website**: Consumer-facing web platform for browsing thrift store inventory
-- **Business Owner Administration Website**: Secure portal for business management and analytics
-- **Mobile Application**: iOS and Android apps for store owners to manage inventory
+- **Business Owner Administration Website**: Secure portal for business management and analytics, including media inventory management
 - **Data Ingestion Backend**: Automated system for processing and validating media uploads
 
 This document outlines the comprehensive functional and non-functional requirements for the ThriftMedia ecosystem, with a special emphasis on secure coding practices and compliance with OWASP Top Ten security recommendations.
@@ -30,49 +29,42 @@ The public-facing website serves as the primary interface for consumers to disco
 - Advanced filtering options by category, location, price range, and availability
 - Responsive design optimized for desktop, tablet, and mobile web browsers
 
-#### 2.1.2 User Account Management
-
-- Registered consumers can create, manage, and personalize their profiles
-- Support for OAuth 2.0 authentication and authorization for consumer accounts
-- User preferences and saved searches functionality
-- No registration required to browse inventory—only for personalized features
-
-#### 2.1.3 Content Display and Promotion
+#### 2.1.2 Content Display and Promotion
 
 - Display business promotions, offers, and featured media prominently
 - Showcase available inventory from local thrift stores
 - Highlight special events and promotional campaigns
 - Time-sensitive offers and flash sales notifications
 
-#### 2.1.4 Location-Based Services
+#### 2.1.3 Location-Based Services
 
 - The website will use location services to narrow the search of media to the consumer's location
 - Display stores within a configurable radius of the consumer's location
 - Option to disable location services if the consumer desires
 - Manual location entry as an alternative to geolocation
 
-#### 2.1.5 Revenue Generation
+#### 2.1.4 Revenue Generation
 
 - The public-facing website will incorporate advertising through platforms such as Google Ads and/or Microsoft Ads
 - Ads will be integrated seamlessly within the consumer experience, ensuring promotional content is relevant and non-intrusive
 - Advertisements will comply with industry standards for privacy and security
 - All advertising aligns with the platform's commitment to secure coding and consumer data protection
 
-#### 2.1.6 Business Model Emphasis
+#### 2.1.5 Business Model Emphasis
 
 - **No eCommerce functionality**: The website will not provide an ecommerce option
 - **Primary goal**: Encourage and increase in-person visits to local thrift stores
 - All online features are designed to showcase available inventory, share promotions, and highlight special events
 - Motivate consumers to explore offerings firsthand at the physical location
 
-#### 2.1.7 Consumer Engagement
+#### 2.1.6 Consumer Engagement
 
 - Allow consumers to provide feedback or reviews on content or businesses
 - Rating system for stores and individual items
 - User-generated content must be moderated to prevent inappropriate or harmful content
 - Community guidelines enforcement
 
-#### 2.1.8 SEO and Visibility
+#### 2.1.7 SEO and Visibility
 
 - Search Engine Optimization (SEO) requirements to improve website visibility
 - Meta tags, structured data, and semantic HTML implementation
@@ -81,150 +73,122 @@ The public-facing website serves as the primary interface for consumers to disco
 
 ### 2.2 Business Owner Administration Website
 
-The business owner administration website provides secure access for store owners to manage their presence on the platform.
+The business owner administration website provides secure access for store owners to manage their own business presence on the platform.
+
+**Scope and Limitations**:
+- Business owners can only manage their own business(es) and associated inventory
+- No platform-wide administrative capabilities are provided
+- Business owners cannot view, edit, or manage other businesses' information
+- All features are scoped to the authenticated user's business account(s) only
 
 #### 2.2.1 Authentication and Access Control
 
 - Secure login for business owners via OAuth 2.0
-- Access management for multiple business team members
-- Role-based permissions (Owner, Manager, Editor, Viewer)
+- Support for third-party consumer identity providers:
+  - Google (Gmail accounts)
+  - Microsoft (Outlook/personal Microsoft accounts)
+  - Other consumer identity providers as needed
+- No support required for enterprise identity providers (Azure AD/Entra ID)
+- Support for both local accounts (email and password) and federated authentication
+- Access management for multiple business team members within the same business
+- Role-based permissions scoped to the business account:
+  - **Owner**: Full access to manage all business attributes (profile, settings, team management) and media inventory
+  - **Worker**: Limited access to manage media inventory only (cannot modify business profile or settings)
+- Users can only access and manage businesses they are explicitly granted permission to
 
 #### 2.2.2 Business Profile Management
 
-- Create, edit, and delete business information
+- Create, edit, and delete their own business information only
 - Store details: hours of operation, contact information, location
 - Business description and specialties
 - Upload business logos and storefront images
+- Cannot view or modify other businesses' profiles or information
 
 #### 2.2.3 Content Management
 
-- Media upload and content management (images, videos, promotions)
-- Bulk upload capabilities for inventory management
-- Image editing and optimization tools
-- Promotional content creation and scheduling
+- Media upload and content management for their own business inventory only (images, videos, promotions)
+- Bulk upload capabilities for their own inventory management
+- Image editing and optimization tools for their own media
+- Promotional content creation and scheduling for their own business
+- Cannot access or manage inventory belonging to other businesses
 
 #### 2.2.4 Analytics and Reporting
 
-- Analytics dashboard for tracking engagement, views, and performance metrics
-- Detailed reports on inventory visibility and consumer interactions
-- Data export options (CSV, PDF, Excel) for reports and analytics
-- Custom date range reporting
-- Key metrics: page views, click-through rates, conversion to in-store visits
+- Analytics dashboard for tracking their own business engagement, views, and performance metrics
+- Detailed reports on their own inventory visibility and consumer interactions
+- Data export options (CSV, PDF, Excel) for their own business reports and analytics
+- Custom date range reporting for their own business data
+- Key metrics: page views, click-through rates, conversion to in-store visits for their business only
+- Cannot view analytics or reports for other businesses
 
 #### 2.2.5 Notification Management
 
-- Notification management for promotions and campaigns
-- Email and SMS notification capabilities
-- Scheduled and triggered notifications
-- Consumer opt-in management
+- Notification management for their own business promotions and campaigns
+- Email and SMS notification capabilities for their own business communications
+- Scheduled and triggered notifications for their own business events
+- Consumer opt-in management for their own business communications only
+- Cannot send notifications on behalf of other businesses
 
-### 2.3 Mobile Application
-
-The mobile application empowers store owners to manage inventory directly from their stores, streamlining the process of adding new items.
-
-#### 2.3.1 Platform Support
-
-- Available on iOS and Android platforms
-- Native app experience optimized for each platform
-- Regular updates for OS compatibility
-
-#### 2.3.2 Authentication and Profile Management
-
-- Secure user registration, authentication, and profile management
-- OAuth 2.0 support for authorization
-- Biometric authentication (fingerprint, Face ID) support
-- Secure session management
-
-#### 2.3.3 Inventory Management Features
-
-- Enables store owners to capture photos of media items (books, audio, video) directly within the store environment
-- Post captured items to their inventory through the app in real-time
-- Add item descriptions, categories, and pricing information
-- Barcode scanning for quick item identification
-- Batch processing of multiple items
-
-#### 2.3.4 Device Integration
-
-- Deep integration with device features:
-  - Camera for inventory photo capture
-  - Maps for location services
-  - Notifications for alerts and updates
-  - Contacts for customer management
-  
-#### 2.3.5 Offline Functionality
-
-- Allow certain features to be accessible even when the user is offline
-- Queue uploads for when connectivity is restored
-- Local data caching for critical information
-- Sync status indicators
-
-#### 2.3.6 Communication and Support
-
-- Push notifications for important updates
-- In-app feedback and support channels for store owners
-- Direct messaging with platform support team
-- Tutorial and onboarding resources
-
-### 2.4 Data Ingestion Backend
+### 2.3 Data Ingestion Backend
 
 The data ingestion backend is a critical component that processes all media uploads and ensures data quality across the platform.
 
-#### 2.4.1 Automated Processing
+#### 2.3.1 Automated Processing
 
-- Automated receipt and processing of media data and images uploaded by store owners via the mobile app
+- Automated receipt and processing of media data and images uploaded by store owners via the Business Owner Administration Website
 - Post new items to the store's inventory database in real-time
 - Image processing and optimization for web display
 - Thumbnail generation for various display sizes
 
-#### 2.4.2 API and Integration Support
+#### 2.3.2 API and Integration Support
 
 - APIs to support real-time data input from partners, businesses, store owners, and third-party content providers
 - RESTful API design with comprehensive documentation
 - Webhook support for event-driven integrations
 - Versioned APIs for backward compatibility
 
-#### 2.4.3 Data Quality and Validation
+#### 2.3.3 Data Quality and Validation
 
 - Robust data validation, transformation, and normalization processes to ensure inventory accuracy
 - Input sanitization and validation rules
 - Duplicate detection and resolution
 - Data quality scoring and reporting
 
-#### 2.4.4 Content Moderation
+#### 2.3.4 Content Moderation
 
 - Screen for pornographic content using automated content detection
 - Flagging system for inappropriate content
 - Manual review workflow for flagged items
 - Compliance with content policies
 
-#### 2.4.5 Monitoring and Logging
+#### 2.3.5 Monitoring and Logging
 
 - Continuous monitoring and logging of all ingestion activities for reliability and traceability
 - Real-time health checks and status monitoring
 - Error tracking and alerting
 - Performance metrics and SLA monitoring
 
-#### 2.4.6 Scheduling and Updates
+#### 2.3.6 Scheduling and Updates
 
 - Support for scheduled data updates to the inventory system
 - Batch processing capabilities for large data sets
 - Priority queuing for time-sensitive updates
 - Retry logic for failed processing attempts
 
-#### 2.4.7 Security
+#### 2.3.7 Security
 
 - Secure internal endpoints protected by authentication and authorization controls
 - API rate limiting to prevent abuse
 - Token-based authentication for API access
 - Audit logging of all data access and modifications
 
-### 2.5 General Functional Requirements
+### 2.4 General Functional Requirements
 
 These requirements apply across all components of the ThriftMedia platform.
 
 **Note**: Initial release targets US English only. Multi-language support may be considered for future releases.
 
-#### 2.5.1 Accessibility
+#### 2.4.1 Accessibility
 
 - Accessibility compliance with WCAG 2.1 Level AA or higher
 - Screen reader compatibility
@@ -232,14 +196,14 @@ These requirements apply across all components of the ThriftMedia platform.
 - Color contrast compliance
 - Alternative text for images and media
 
-#### 2.5.2 Audit and Compliance
+#### 2.4.2 Audit and Compliance
 
 - Comprehensive audit trails for critical actions
 - User activity logging for security and compliance
 - Data retention policies
 - GDPR and privacy regulation compliance features
 
-#### 2.5.3 Monitoring and Observability
+#### 2.4.3 Monitoring and Observability
 
 - Logging and monitoring of user activities for security and performance
 - Application performance monitoring (APM)
