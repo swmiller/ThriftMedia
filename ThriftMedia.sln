@@ -29,6 +29,35 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThriftMedia.Mediator", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThriftMedia.Application", "src\ThriftMedia.Application\ThriftMedia.Application.csproj", "{8B3BF94B-B208-483E-94E4-1552CF8DA629}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{CBC3F9EE-02B4-4E09-B20E-C679F14CB52B}"
+	ProjectSection(SolutionItems) = preProject
+		doc\App Requirements.md = doc\App Requirements.md
+		doc\ASPIRE-ONPREM-DEPLOYMENT.md = doc\ASPIRE-ONPREM-DEPLOYMENT.md
+		DEVELOPMENT-RECOMMENDATIONS.md = DEVELOPMENT-RECOMMENDATIONS.md
+		doc\MediaIngestionPipeline.md = doc\MediaIngestionPipeline.md
+		MEDIATR-MIGRATION.md = MEDIATR-MIGRATION.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{0E9B1183-BD10-4C78-A4E3-EAF8EDE38564}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot-instructions.md = .github\copilot-instructions.md
+		.github\PROJECT-BRIEF.md = .github\PROJECT-BRIEF.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{E02B1708-CABA-4ADC-A865-E227F2F66FA7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{B55FC73B-5FAB-41E9-BEF7-B17EB0B62649}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{EAFA10FC-6DA9-42A8-9549-D0BF3C95129F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "chatmodes", "chatmodes", "{3A60DA3C-B998-4E29-B4AB-89D122B0581B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\chatmodes\beastmode3.1.chatmode.md = .github\chatmodes\beastmode3.1.chatmode.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1392FBE0-4221-4D56-BCB0-543374E3BB2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -200,6 +229,8 @@ Global
 		{C2B405BE-E0C1-4356-8D88-6104E56F116A} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{D37DEA22-09E5-440B-96A7-117696E1BE67} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{8B3BF94B-B208-483E-94E4-1552CF8DA629} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{3A60DA3C-B998-4E29-B4AB-89D122B0581B} = {0E9B1183-BD10-4C78-A4E3-EAF8EDE38564}
+		{1392FBE0-4221-4D56-BCB0-543374E3BB2C} = {0E9B1183-BD10-4C78-A4E3-EAF8EDE38564}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F8F1201-C07B-4701-95FE-276EBD4991EA}
