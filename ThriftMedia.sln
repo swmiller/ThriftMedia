@@ -32,10 +32,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{CBC3F9EE-02B4-4E09-B20E-C679F14CB52B}"
 	ProjectSection(SolutionItems) = preProject
 		doc\App Requirements.md = doc\App Requirements.md
-		doc\ASPIRE-ONPREM-DEPLOYMENT.md = doc\ASPIRE-ONPREM-DEPLOYMENT.md
-		DEVELOPMENT-RECOMMENDATIONS.md = DEVELOPMENT-RECOMMENDATIONS.md
-		doc\MediaIngestionPipeline.md = doc\MediaIngestionPipeline.md
-		MEDIATR-MIGRATION.md = MEDIATR-MIGRATION.md
 		README.md = README.md
 	EndProjectSection
 EndProject
