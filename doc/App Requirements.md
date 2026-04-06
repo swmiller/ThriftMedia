@@ -50,6 +50,13 @@ The public-facing website serves as the primary interface for consumers to disco
 - Advertisements will comply with industry standards for privacy and security
 - All advertising aligns with the platform's commitment to secure coding and consumer data protection
 
+**Platform Monetization Model**:
+- The ThriftMedia platform is **completely free** for businesses to use
+- No subscription fees, listing fees, or transaction fees are charged to businesses
+- Platform revenue is generated exclusively through advertising displayed on the public-facing website
+- Initial implementation will use **Google Ads** with architecture designed to support alternative advertising providers
+- Ad revenue model ensures businesses can showcase inventory at no cost while maintaining platform sustainability
+
 #### 2.1.5 Business Model Emphasis
 
 - **No eCommerce functionality**: The website will not provide an ecommerce option
@@ -129,66 +136,174 @@ The business owner administration website provides secure access for store owner
 - Consumer opt-in management for their own business communications only
 - Cannot send notifications on behalf of other businesses
 
-### 2.3 Data Ingestion Backend
+### 2.3 Platform Administration
+
+The platform administration capabilities provide global management and oversight of the ThriftMedia platform. Platform administrators have elevated privileges to manage the entire ecosystem.
+
+**Scope and Authority**:
+- Platform administrators have global access across all businesses and platform components
+- Responsible for platform health, security, content moderation, and business account management
+- Separate and distinct from business owner roles
+- Limited to authorized ThriftMedia personnel only
+
+#### 2.3.1 Authentication and Access Control
+
+- Secure login for platform administrators via OAuth 2.0
+- Support for third-party consumer identity providers:
+  - Google (Gmail accounts)
+  - Microsoft (Outlook/personal Microsoft accounts)
+  - Other consumer identity providers as needed
+- Same authentication mechanisms as business owners for consistency
+- Role-based permissions:
+  - **Platform Administrator**: Full platform-wide access to all administrative functions
+- Multi-factor authentication (MFA) required for all administrator accounts
+- Administrator access is audited and logged comprehensively
+
+#### 2.3.2 Business Account Management
+
+- Approve new business registrations and account requests
+- Reject business registrations that do not meet platform requirements
+- Suspend or deactivate business accounts for policy violations
+- Reactivate suspended business accounts after issue resolution
+- View all business profiles and account information
+- Modify business account settings when necessary for compliance or security
+- Manage business account lifecycle (creation, suspension, deletion)
+- Send notifications to business owners regarding account status
+
+#### 2.3.3 Content Moderation Management
+
+- Review flagged content from automated content detection systems
+- Approve or remove media items flagged as inappropriate
+- Manage consumer reviews and ratings flagged for moderation
+- Review and action on user-generated content that violates community guidelines
+- Access moderation queue with filtering and prioritization capabilities
+- Document moderation decisions for audit trail
+- Configure content moderation rules and policies
+- Override automated moderation decisions when necessary
+
+#### 2.3.4 Platform Configuration
+
+- Configure global platform settings:
+  - Default search radius for location-based services
+  - Maximum inventory items per business
+  - Image upload size and format restrictions
+  - Session timeout values
+  - Rate limiting thresholds
+  - Content moderation sensitivity levels
+- Manage platform-wide notification templates
+- Configure advertising placement and policies
+- Set data retention policies
+- Define and update community guidelines
+- Configure API rate limits and access controls
+
+#### 2.3.5 System Health and Monitoring
+
+- Monitor system health across all platform components
+- View real-time system metrics (CPU, memory, disk, network)
+- Respond to automated system alerts and notifications
+- Access performance monitoring dashboards
+- Review error logs and incident reports
+- Investigate security incidents and anomalies
+- Manage system maintenance windows
+- Monitor service level agreement (SLA) compliance
+- Review infrastructure scaling events
+
+#### 2.3.6 Platform Analytics
+
+- Access platform-wide analytics and reporting:
+  - Total number of businesses, users, and inventory items
+  - Consumer engagement metrics across the platform
+  - Advertising revenue and performance metrics
+  - Search and discovery usage patterns
+  - Geographic distribution of businesses and consumers
+  - Growth trends and key performance indicators (KPIs)
+- Export platform-wide data for analysis
+- Generate custom reports across multiple businesses
+- View aggregated performance metrics
+- Monitor consumer behavior patterns
+- Track platform adoption and usage trends
+
+#### 2.3.7 User Support Management
+
+- Manage support requests from business owners
+- Handle consumer inquiries and complaints
+- Respond to technical support tickets
+- Escalate critical issues to development team
+- Document support interactions and resolutions
+- Provide guidance on platform features and policies
+- Manage frequently asked questions (FAQ) and help documentation
+- Track support metrics (response time, resolution time, satisfaction)
+
+#### 2.3.8 Maintenance Tools
+
+**Note**: The following maintenance tools and capabilities are **TBD (To Be Determined)** for future phases:
+- Direct database access tools for data management and troubleshooting
+- Command-line tools for administrative operations
+- Basic admin interface for routine maintenance tasks
+- Automated backup and restore utilities
+- Data migration and import/export tools
+- Schema update and database maintenance scripts
+
+### 2.4 Data Ingestion Backend
 
 The data ingestion backend is a critical component that processes all media uploads and ensures data quality across the platform.
 
-#### 2.3.1 Automated Processing
+#### 2.4.1 Automated Processing
 
 - Automated receipt and processing of media data and images uploaded by store owners via the Business Owner Administration Website
 - Post new items to the store's inventory database in real-time
 - Image processing and optimization for web display
 - Thumbnail generation for various display sizes
 
-#### 2.3.2 API and Integration Support
+#### 2.4.2 API and Integration Support
 
 - APIs to support real-time data input from partners, businesses, store owners, and third-party content providers
 - RESTful API design with comprehensive documentation
 - Webhook support for event-driven integrations
 - Versioned APIs for backward compatibility
 
-#### 2.3.3 Data Quality and Validation
+#### 2.4.3 Data Quality and Validation
 
 - Robust data validation, transformation, and normalization processes to ensure inventory accuracy
 - Input sanitization and validation rules
 - Duplicate detection and resolution
 - Data quality scoring and reporting
 
-#### 2.3.4 Content Moderation
+#### 2.4.4 Content Moderation
 
 - Screen for pornographic content using automated content detection
 - Flagging system for inappropriate content
 - Manual review workflow for flagged items
 - Compliance with content policies
 
-#### 2.3.5 Monitoring and Logging
+#### 2.4.5 Monitoring and Logging
 
 - Continuous monitoring and logging of all ingestion activities for reliability and traceability
 - Real-time health checks and status monitoring
 - Error tracking and alerting
 - Performance metrics and SLA monitoring
 
-#### 2.3.6 Scheduling and Updates
+#### 2.4.6 Scheduling and Updates
 
 - Support for scheduled data updates to the inventory system
 - Batch processing capabilities for large data sets
 - Priority queuing for time-sensitive updates
 - Retry logic for failed processing attempts
 
-#### 2.3.7 Security
+#### 2.4.7 Security
 
 - Secure internal endpoints protected by authentication and authorization controls
 - API rate limiting to prevent abuse
 - Token-based authentication for API access
 - Audit logging of all data access and modifications
 
-### 2.4 General Functional Requirements
+### 2.5 General Functional Requirements
 
 These requirements apply across all components of the ThriftMedia platform.
 
 **Note**: Initial release targets US English only. Multi-language support may be considered for future releases.
 
-#### 2.4.1 Accessibility
+#### 2.5.1 Accessibility
 
 - Accessibility compliance with WCAG 2.1 Level AA or higher
 - Screen reader compatibility
@@ -196,14 +311,14 @@ These requirements apply across all components of the ThriftMedia platform.
 - Color contrast compliance
 - Alternative text for images and media
 
-#### 2.4.2 Audit and Compliance
+#### 2.5.2 Audit and Compliance
 
 - Comprehensive audit trails for critical actions
 - User activity logging for security and compliance
 - Data retention policies
 - GDPR and privacy regulation compliance features
 
-#### 2.4.3 Monitoring and Observability
+#### 2.5.3 Monitoring and Observability
 
 - Logging and monitoring of user activities for security and performance
 - Application performance monitoring (APM)
