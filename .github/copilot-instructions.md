@@ -1,8 +1,7 @@
 # Copilot Instructions
 
 - Prefer **XUnit** as the testing framework.
-- Use **Test Driven Development (TDD)** best practices:
-  - Write tests before implementing new features or fixing bugs.
+- Use **testing best practices**:
   - Ensure all new code is covered by unit tests.
   - Refactor code only when tests are passing.
   - Maintain fast, reliable, and isolated tests.
@@ -34,12 +33,11 @@
   - All infrastructure components (PostgreSQL, RabbitMQ, MinIO) run as containers.
   - All application services run as containers for consistent environments.
   - Managed by .NET Aspire for orchestration.
-  - Enables on-premise Linux deployment without cloud dependencies.
 - Use **RabbitMQ** for message queuing and asynchronous processing.
 - Use **MinIO** for S3-compatible object storage for media files.
-- Use **Akka.NET** and the **Actor Pattern** for backend processing, pipelines, and worker services:
-  - APIs and controllers use standard ASP.NET Core patterns (not actors).
-  - Background processing, media pipelines, and long-running tasks use Akka.NET actors.
-  - Actors provide message-driven, scalable, and resilient processing.
-  - Each processing step is implemented as an actor for isolation and fault tolerance.
-- **Deployment**: All components are containerized and deploy to on-premise Linux servers using Docker.
+- Use **standard ASP.NET minimal web API architecture and best practices** for all web APIs, endpoints, and services.
+- Use **Akka.NET** and the **Actor Pattern** only for the media ingestion pipeline:
+  - The media ingestion pipeline uses Akka.NET actors for message-driven, scalable, and resilient processing.
+  - Each processing step in the media pipeline is implemented as an actor for isolation and fault tolerance.
+  - All other components (web APIs, background services, etc.) use standard ASP.NET Core patterns (not actors).
+- **Deployment**: All components are containerized using Docker for flexible deployment to Windows Servers or Azure.
