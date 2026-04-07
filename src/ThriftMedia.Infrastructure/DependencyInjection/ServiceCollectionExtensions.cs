@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThriftMedia.Application.Repositories;
+using ThriftMedia.Application.Services;
 using ThriftMedia.Domain.Services;
 using ThriftMedia.Infrastructure.Persistence.Models;
 using ThriftMedia.Infrastructure.Repositories;
@@ -27,6 +28,11 @@ public static class ServiceCollectionExtensions
 
         // Register domain services
         services.AddScoped<IMediaModerationService, MediaModerationService>();
+
+        // Register application services
+        services.AddScoped<IOcrService, OcrService>();
+        services.AddScoped<IMediaClassificationService, MediaClassificationService>();
+        services.AddScoped<IContentModerationService, ContentModerationService>();
 
         return services;
     }
