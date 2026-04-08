@@ -26,8 +26,4 @@ var web = builder.AddProject<Projects.ThriftMedia_Web>("web")
     .WithReference(api)
     .WithExternalHttpEndpoints();
 
-//// Register Media Processor Worker Service (uses Akka.NET actors for backend processing)
-//var mediaProcessor = builder.AddProject<Projects.ThriftMedia_MediaProcessor>("media-processor")
-//    .WithReference(thriftMediaDb);
-
 builder.Build().Run();

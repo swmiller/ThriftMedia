@@ -36,6 +36,7 @@
 - Use **standard ASP.NET minimal web API architecture and best practices** for all web APIs, endpoints, and services.
 - Use **Akka.NET** and the **Actor Pattern** only for the media ingestion pipeline:
   - The media ingestion pipeline uses Akka.NET actors for message-driven, scalable, and resilient processing.
+  - Akka.NET actor system is hosted within the API project and triggered by the media ingestion API endpoint.
   - Each processing step in the media pipeline is implemented as an actor for isolation and fault tolerance.
-  - All other components (web APIs, background services, etc.) use standard ASP.NET Core patterns (not actors).
+  - All other components (web APIs, Blazor apps) use standard ASP.NET Core patterns (not actors).
 - **Deployment**: All components are containerized using Docker for flexible deployment to Windows Servers or Azure.
