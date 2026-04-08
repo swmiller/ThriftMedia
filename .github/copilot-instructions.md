@@ -30,10 +30,9 @@
 - Use **Entity Framework Core** for data access, ensuring efficient and maintainable database interactions.
 - Use **Bootstrap** for web site layout and styling, ensuring responsive and consistent UI design.
 - Use **Docker containers** for all services in development and deployment:
-  - All infrastructure components (PostgreSQL, RabbitMQ, MinIO) run as containers.
+  - All infrastructure components (PostgreSQL, MinIO) run as containers.
   - All application services run as containers for consistent environments.
   - Managed by .NET Aspire for orchestration.
-- Use **RabbitMQ** for message queuing and asynchronous processing.
 - Use **MinIO** for S3-compatible object storage for media files.
 - Use **standard ASP.NET minimal web API architecture and best practices** for all web APIs, endpoints, and services.
 - Use **Akka.NET** and the **Actor Pattern** only for the media ingestion pipeline:

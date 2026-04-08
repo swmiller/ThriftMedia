@@ -12,10 +12,6 @@ var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
 var config = builder.Configuration;
 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-//// Add RabbitMQ for message queue (on-premise, containerized)
-//var rabbitmq = builder.AddRabbitMQ("messaging")
-//    .WithDataVolume();
-
 //// Add MinIO for object storage (on-premise, S3-compatible, containerized)
 //var minio = builder.AddContainer("minio", "minio/minio")
 //    .WithEndpoint(port: 9000, targetPort: 9000, name: "api")
@@ -42,7 +38,6 @@ var web = builder.AddProject<Projects.ThriftMedia_Web>("web")
 //// Register Media Processor Worker Service (uses Akka.NET actors for backend processing)
 //var mediaProcessor = builder.AddProject<Projects.ThriftMedia_MediaProcessor>("media-processor")
 //    .WithReference(thriftMediaDb)
-//    .WithReference(rabbitmq)
 //    .WithEnvironment("MinIO__Endpoint", "localhost:9000")
 //    .WithEnvironment("MinIO__AccessKey", "minioadmin")
 //    .WithEnvironment("MinIO__SecretKey", "minioadmin");
