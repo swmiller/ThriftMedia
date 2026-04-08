@@ -4,7 +4,7 @@ namespace ThriftMedia.Tests;
 
 public class ApiTests : AspireTestBase
 {
-    private const string ThriftMediaApiResourceName = "thriftmediaapi";
+    private const string ThriftMediaApiResourceName = "api";
     private const string MediaEndpoint = "/media";
 
     /// <summary>
