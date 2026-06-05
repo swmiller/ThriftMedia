@@ -9,6 +9,11 @@ var postgres = builder.AddPostgres("postgres")
     .WithDataVolume();
 var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
 
+// Add PostgreSQL database with data stored on the Windows host C:\ drive
+//var postgres = builder.AddPostgres("postgres")
+//    .WithDataBindMount(@"C:\ThriftMediaData\PostgreSQL");
+//var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
+
 var config = builder.Configuration;
 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
