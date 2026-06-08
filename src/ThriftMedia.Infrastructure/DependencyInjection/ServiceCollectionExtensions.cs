@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
         var connectionString = configuration.GetConnectionString("ThriftMediaDb")
             ?? throw new InvalidOperationException("Connection string 'ThriftMediaDb' not found.");
 
-        services.AddDbContext<ThriftMediaDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<ThriftMediaDbContext>(options => options.UseSqlServer(connectionString));
 
         // Register generic repository
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

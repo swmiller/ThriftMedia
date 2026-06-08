@@ -4,20 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Add PostgreSQL database with persistent storage
-var postgres = builder.AddPostgres("postgres")
-    .WithDataVolume();
-var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
-
-// Add PostgreSQL database with data stored on the Windows host C:\ drive
-//var postgres = builder.AddPostgres("postgres")
-//    .WithDataBindMount(@"C:\ThriftMediaData\PostgreSQL");
-//var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
+// Use existing Microsoft SQL Server (not containerized)
+var thriftMediaDb = builder.AddConnectionString("ThriftMediaDb");
 
 var config = builder.Configuration;
 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// Register API project and reference PostgreSQL database
+// Register API project and reference Microsoft SQL Server database
 var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
     .WithReference(thriftMediaDb);
 

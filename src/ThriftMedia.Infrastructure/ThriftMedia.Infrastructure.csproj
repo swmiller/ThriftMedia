@@ -7,7 +7,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -18,5 +18,8 @@
         <ProjectReference Include="..\ThriftMedia.Domain\ThriftMedia.Domain.csproj" />
         <ProjectReference Include="..\ThriftMedia.Mediator\ThriftMedia.Mediator.csproj" />
         <ProjectReference Include="..\ThriftMedia.Application\ThriftMedia.Application.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Migrations\" />
     </ItemGroup>
 </Project>
