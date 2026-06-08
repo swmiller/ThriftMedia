@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using ThriftMedia.Application.DependencyInjection;
 using ThriftMedia.Infrastructure.DependencyInjection;
-using ThriftMedia.Infrastructure.Persistence;
+//using ThriftMedia.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 

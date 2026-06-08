@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ThriftMedia.Application.Repositories;
 using ThriftMedia.Application.Services;
 using ThriftMedia.Domain.Services;
-using ThriftMedia.Infrastructure.Persistence.Models;
+//using ThriftMedia.Infrastructure.Persistence.Models;
 using ThriftMedia.Infrastructure.Repositories;
 using ThriftMedia.Infrastructure.Services;
 
@@ -17,10 +17,10 @@ public static class ServiceCollectionExtensions
         var connectionString = configuration.GetConnectionString("ThriftMediaDb")
             ?? throw new InvalidOperationException("Connection string 'ThriftMediaDb' not found.");
 
-        services.AddDbContext<ThriftMediaDbContext>(options => options.UseSqlServer(connectionString));
+        //services.AddDbContext<ThriftMediaDbContext>(options => options.UseSqlServer(connectionString));
 
         // Register generic repository
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         // Register specific repositories
         services.AddScoped<IMediaRepository, MediaRepository>();
