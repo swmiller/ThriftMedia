@@ -3,7 +3,7 @@ using ThriftMedia.Application.Repositories;
 using DomainStore = ThriftMedia.Domain.Entities.Store;
 using DomainAddress = ThriftMedia.Domain.ValueObjects.Address;
 using PersistenceStore = ThriftMedia.Infrastructure.Persistence.Models.Store;
-using PersistenceAddress = ThriftMedia.Infrastructure.Persistence.Models.Address;
+//using PersistenceAddress = ThriftMedia.Infrastructure.Persistence.Models.Address;
 using ThriftMedia.Infrastructure.Persistence.Models;
 
 namespace ThriftMedia.Infrastructure.Repositories;
@@ -46,62 +46,64 @@ public class StoreRepository : IStoreRepository
     // Mapping methods (temporary until Phase 3 impedance mismatch is resolved)
     private static DomainStore ToDomain(PersistenceStore model)
     {
-        var address = model.Address != null
-            ? DomainAddress.Create(
-                model.Address.Street ?? string.Empty,
-                model.Address.City ?? string.Empty,
-                model.Address.State ?? string.Empty,
-                model.Address.ZipCode ?? string.Empty,
-                model.Address.Country ?? "US"
-              )
-            : DomainAddress.Create(string.Empty, string.Empty, string.Empty, string.Empty, "US");
+        //var address = model.Address != null
+        //    ? DomainAddress.Create(
+        //        model.Address.Street ?? string.Empty,
+        //        model.Address.City ?? string.Empty,
+        //        model.Address.State ?? string.Empty,
+        //        model.Address.ZipCode ?? string.Empty,
+        //        model.Address.Country ?? "US"
+        //      )
+        //    : DomainAddress.Create(string.Empty, string.Empty, string.Empty, string.Empty, "US");
 
-        var store = DomainStore.Create(
-            model.Name,
-            address,
-            model.CreatedBy,
-            model.CreatedAt
-        );
+        //var store = DomainStore.Create(
+        //    model.Name,
+        //    address,
+        //    model.CreatedBy,
+        //    model.CreatedAt
+        //);
 
-        // Use reflection to set Id (temporary workaround)
-        typeof(DomainStore).GetProperty("Id")!.SetValue(store, model.Id);
+        //// Use reflection to set Id (temporary workaround)
+        //typeof(DomainStore).GetProperty("Id")!.SetValue(store, model.Id);
 
-        if (model.BusinessLicenseImageUri != null)
-        {
-            store.SetBusinessLicenseImage(
-                new Uri(model.BusinessLicenseImageUri),
-                model.UpdatedBy ?? "system",
-                model.UpdatedAt ?? DateTime.UtcNow
-            );
-        }
+        //if (model.BusinessLicenseImageUri != null)
+        //{
+        //    store.SetBusinessLicenseImage(
+        //        new Uri(model.BusinessLicenseImageUri),
+        //        model.UpdatedBy ?? "system",
+        //        model.UpdatedAt ?? DateTime.UtcNow
+        //    );
+        //}
 
-        if (model.ExplicitContentFlagged)
-        {
-            store.FlagExplicitContent(model.UpdatedBy ?? "system", model.UpdatedAt ?? DateTime.UtcNow);
-        }
+        //if (model.ExplicitContentFlagged)
+        //{
+        //    store.FlagExplicitContent(model.UpdatedBy ?? "system", model.UpdatedAt ?? DateTime.UtcNow);
+        //}
 
-        return store;
+        //return store;
+
+        return null;
     }
 
     private static void UpdateModel(PersistenceStore model, DomainStore domain)
     {
-        model.Name = domain.Name;
-        model.BusinessLicenseImageUri = domain.BusinessLicenseImageUri?.ToString();
-        model.ExplicitContentFlagged = domain.ExplicitContentFlagged;
-        model.UpdatedAt = domain.Audit.UpdatedAtUtc;
-        model.UpdatedBy = domain.Audit.UpdatedBy;
+        //model.Name = domain.Name;
+        //model.BusinessLicenseImageUri = domain.BusinessLicenseImageUri?.ToString();
+        //model.ExplicitContentFlagged = domain.ExplicitContentFlagged;
+        //model.UpdatedAt = domain.Audit.UpdatedAtUtc;
+        //model.UpdatedBy = domain.Audit.UpdatedBy;
 
-        if (domain.Address != null)
-        {
-            if (model.Address == null)
-            {
-                model.Address = new PersistenceAddress();
-            }
-            model.Address.Street = domain.Address.Street;
-            model.Address.City = domain.Address.City;
-            model.Address.State = domain.Address.State;
-            model.Address.ZipCode = domain.Address.ZipCode;
-            model.Address.Country = domain.Address.Country;
-        }
+        //if (domain.Address != null)
+        //{
+        //    if (model.Address == null)
+        //    {
+        //        model.Address = new PersistenceAddress();
+        //    }
+        //    model.Address.Street = domain.Address.Street;
+        //    model.Address.City = domain.Address.City;
+        //    model.Address.State = domain.Address.State;
+        //    model.Address.ZipCode = domain.Address.ZipCode;
+        //    model.Address.Country = domain.Address.Country;
+        //}
     }
 }

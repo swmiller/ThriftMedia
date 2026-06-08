@@ -23,41 +23,49 @@ public class MediaRepository : IMediaRepository
 
     public async Task<DomainMedia?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var model = await _context.MediaItems.FindAsync(new object[] { id }, cancellationToken);
-        return model == null ? null : ToDomain(model);
+        //var model = await _context.MediaItems.FindAsync(new object[] { id }, cancellationToken);
+        //return model == null ? null : ToDomain(model);
+        
+        return null;
     }
 
     public async Task<IEnumerable<DomainMedia>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var models = await _context.MediaItems.AsNoTracking().ToListAsync(cancellationToken);
-        return models.Select(ToDomain);
+        //var models = await _context.MediaItems.AsNoTracking().ToListAsync(cancellationToken);
+        //return models.Select(ToDomain);
+
+        return null;
     }
 
     public async Task<DomainMedia> AddAsync(DomainMedia media, CancellationToken cancellationToken = default)
     {
-        var model = ToModel(media);
-        await _context.MediaItems.AddAsync(model, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
-        return ToDomain(model);
+        //var model = ToModel(media);
+        //await _context.MediaItems.AddAsync(model, cancellationToken);
+        //await _context.SaveChangesAsync(cancellationToken);
+        //return ToDomain(model);
+
+        return null;
     }
 
     public async Task UpdateAsync(DomainMedia media, CancellationToken cancellationToken = default)
     {
-        var model = await _context.MediaItems.FindAsync(new object[] { media.Id }, cancellationToken);
-        if (model != null)
-        {
-            UpdateModel(model, media);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
+        //var model = await _context.MediaItems.FindAsync(new object[] { media.Id }, cancellationToken);
+        //if (model != null)
+        //{
+        //    UpdateModel(model, media);
+        //    await _context.SaveChangesAsync(cancellationToken);
+        //}
     }
 
     public async Task<IEnumerable<DomainMedia>> GetByStoreIdAsync(int storeId, CancellationToken cancellationToken = default)
     {
-        var models = await _context.MediaItems
-            .Where(m => m.StoreId == storeId)
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
-        return models.Select(ToDomain);
+        //var models = await _context.MediaItems
+        //    .Where(m => m.StoreId == storeId)
+        //    .AsNoTracking()
+        //    .ToListAsync(cancellationToken);
+        //return models.Select(ToDomain);
+
+        return null;
     }
 
     // Mapping methods (temporary until Phase 3 impedance mismatch is resolved)

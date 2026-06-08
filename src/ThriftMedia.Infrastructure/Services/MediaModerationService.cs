@@ -19,8 +19,10 @@ public class MediaModerationService : IMediaModerationService
     /// <inheritdoc />
     public async Task<bool> HasExplicitContentAsync(int storeId, CancellationToken cancellationToken = default)
     {
-        return await _context.MediaItems
-            .Where(m => m.StoreId == storeId && m.IsExplicitContent)
-            .AnyAsync(cancellationToken);
+        //return await _context.MediaItems
+        //    .Where(m => m.StoreId == storeId && m.IsExplicitContent)
+        //    .AnyAsync(cancellationToken);
+
+        return false;
     }
 }
