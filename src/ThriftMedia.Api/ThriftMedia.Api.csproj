@@ -17,4 +17,12 @@
         <ProjectReference Include="..\ThriftMedia.Infrastructure\ThriftMedia.Infrastructure.csproj" />
         <ProjectReference Include="..\ThriftMedia.Application\ThriftMedia.Application.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Features\Stores\GetStoreById\" />
+      <Folder Include="Features\Stores\CreateStore\" />
+      <Folder Include="Features\Stores\ChangeStoreAddress\" />
+      <Folder Include="Features\Stores\FlagExplicitContent\" />
+      <Folder Include="Features\Stores\SetBusinessLicenseImage\" />
+      <Folder Include="Features\Stores\RenameStore\" />
+    </ItemGroup>
 </Project>

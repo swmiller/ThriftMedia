@@ -92,6 +92,7 @@ public partial class ThriftMediaDbContext : DbContext
             entity.Property(e => e.OwnerLastName).HasMaxLength(50);
             entity.Property(e => e.PhoneNumber).HasMaxLength(50);
             entity.Property(e => e.Postcode).HasMaxLength(20);
+            entity.Property(e => e.ProvinceState).HasMaxLength(50);
             entity.Property(e => e.StoreName).HasMaxLength(100);
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
             entity.Property(e => e.UpdatedBy).HasMaxLength(100);

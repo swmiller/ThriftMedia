@@ -57,6 +57,8 @@ public partial class Store
 
     public int AppUserId { get; set; }
 
+    public string? ProvinceState { get; set; }
+
     public virtual AppUser AppUser { get; set; } = null!;
 
     public virtual ICollection<Medium> Media { get; set; } = new List<Medium>();

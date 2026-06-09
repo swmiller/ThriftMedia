@@ -20,10 +20,12 @@ public class GetAllStoresQueryHandler : IRequestHandler<GetAllStoresQuery, IEnum
     {
         var stores = await _storeRepository.GetAllAsync(cancellationToken);
 
-        return stores.Select(store => new StoreDto(
-            store.Id,
-            store.Name,
-            $"{store.Address?.Street}, {store.Address?.City}, {store.Address?.State} {store.Address?.ZipCode}"
-        ));
+        //return stores.Select(store => new StoreDto(
+        //    store.Id,
+        //    store.Name,
+        //    $"{store.Address?.Street}, {store.Address?.City}, {store.Address?.State} {store.Address?.ZipCode}"
+        //));
+
+        return null;
     }
 }

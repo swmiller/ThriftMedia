@@ -1,3 +1,26 @@
 namespace ThriftMedia.Contracts.Dto;
 
-public record StoreDto(int Id, string Name, string Address);
+public record StoreDto(
+    int Id,
+    string StoreName,
+    string? PhoneNumber,
+    string? WebsiteUrl,
+    bool IsActive,
+    bool IsSuspended,
+    string? OwnerFirstName,
+    string? OwnerLastName,
+    string? OwerPhoneNumber,
+    string? OwerEmail,
+    string LicenseNumber,
+    string LicenseType,
+    string IssueingAuthority,
+    DateTime IssueDate,
+    DateTime? ExpirationDate,
+    string LicenseStatus,
+    string Address1,
+    string Address2,
+    string City,
+    string Postcode,
+    string? Country,
+    int AppUserId,
+    string? ProvinceState);
