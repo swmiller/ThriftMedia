@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using ThriftMedia.Api.Features.Stores.GetAllStores;
 using ThriftMedia.Application.DependencyInjection;
 using ThriftMedia.Infrastructure.DependencyInjection;
 //using ThriftMedia.Infrastructure.Persistence;
@@ -24,10 +25,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Register media endpoints
-app.MapMediaEndpoints();
+// TODO: Register media endpoints
+
 
 // Register store owner endpoints
-app.MapStoreOwnerEndpoints();
+app.MapGetAllStoresEndpoint();
 
 app.Run();
