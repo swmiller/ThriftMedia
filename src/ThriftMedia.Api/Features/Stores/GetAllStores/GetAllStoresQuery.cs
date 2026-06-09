@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ThriftMedia.Application.Queries;
 using ThriftMedia.Contracts.Dto;
 using ThriftMedia.Infrastructure.Persistence.Models;
 using ThriftMedia.Mediator;
@@ -18,7 +17,6 @@ namespace ThriftMedia.Api.Features.Stores.GetAllStores
         }
         public async Task<IEnumerable<StoreDto>> Handle(GetAllStoresQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
             var allStores = await _dbContext.Stores
                 .AsNoTracking()
                 .Select( s => new StoreDto(
@@ -30,8 +28,8 @@ namespace ThriftMedia.Api.Features.Stores.GetAllStores
                     s.IsSuspended,
                     s.OwnerFirstName,
                     s.OwnerLastName,
-                    s.OwerPhoneNumber,
-                    s.OwerEmail,
+                    s.OwnerPhoneNumber,
+                    s.OwnerEmail,
                     s.LicenseNumber,
                     s.LicenseType,
                     s.IssueingAuthority,
@@ -41,7 +39,7 @@ namespace ThriftMedia.Api.Features.Stores.GetAllStores
                     s.Address1,
                     s.Address2,
                     s.City,
-                    s.Postcode,
+                    s.PostalCode,
                     s.Country,
                     s.AppUserId,
                     s.ProvinceState

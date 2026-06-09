@@ -21,9 +21,9 @@ public partial class Store
 
     public string? OwnerLastName { get; set; }
 
-    public string? OwerPhoneNumber { get; set; }
+    public string? OwnerPhoneNumber { get; set; }
 
-    public string? OwerEmail { get; set; }
+    public string? OwnerEmail { get; set; }
 
     public string LicenseNumber { get; set; } = null!;
 
@@ -43,7 +43,7 @@ public partial class Store
 
     public string City { get; set; } = null!;
 
-    public string Postcode { get; set; } = null!;
+    public string PostalCode { get; set; } = null!;
 
     public string? Country { get; set; }
 
