@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ThriftMedia.Mediator;
 using System.Reflection;
 using ThriftMedia.Application.Pipelines;
-using ThriftMedia.Application.Pipelines.Steps;
 
 namespace ThriftMedia.Application.DependencyInjection;
 
@@ -21,7 +20,6 @@ public static class ServiceCollectionExtensions
         //services.AddValidatorsFromAssembly(Assembly.GetCallingAssembly());
 
         // Register media processing pipeline and steps
-        services.AddTransient<MediaProcessingPipeline>();
 
         return services;
     }
