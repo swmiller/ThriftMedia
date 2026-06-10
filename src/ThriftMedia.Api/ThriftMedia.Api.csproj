@@ -15,7 +15,6 @@
     <ItemGroup>
         <ProjectReference Include="..\ThriftMedia.Contracts\ThriftMedia.Contracts.csproj" />
         <ProjectReference Include="..\ThriftMedia.Infrastructure\ThriftMedia.Infrastructure.csproj" />
-        <!--<ProjectReference Include="..\ThriftMedia.Application\ThriftMedia.Application.csproj" />-->
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Features\Stores\FlagExplicitContent\" />
