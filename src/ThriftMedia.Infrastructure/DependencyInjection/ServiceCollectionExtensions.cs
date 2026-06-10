@@ -30,9 +30,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMediaModerationService, MediaModerationService>();
 
         // Register application services
-        services.AddScoped<IOcrService, OcrService>();
-        services.AddScoped<IMediaClassificationService, MediaClassificationService>();
-        services.AddScoped<IContentModerationService, ContentModerationService>();
+        //services.AddScoped<IOcrService, OcrService>();
+        //services.AddScoped<IMediaClassificationService, MediaClassificationService>();
+        //services.AddScoped<IContentModerationService, ContentModerationService>();
 
         return services;
     }
