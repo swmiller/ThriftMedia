@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using ThriftMedia.Api.Features.Stores.ChangeStoreAddress;
 using ThriftMedia.Api.Features.Stores.CreateStore;
 using ThriftMedia.Api.Features.Stores.GetAllStores;
 using ThriftMedia.Api.Features.Stores.GetStoreById;
@@ -36,5 +37,6 @@ app.MapGetAllStoresEndpoint();
 app.MapGetStoreByIdEndpoint();
 app.MapCreateStoreEndpoint();
 app.MapRenameStoreEndpoint();
+app.MapChangeStoreAddressEndpoint();
 
 app.Run();
