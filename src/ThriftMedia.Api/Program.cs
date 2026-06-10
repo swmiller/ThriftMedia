@@ -5,14 +5,12 @@ using ThriftMedia.Api.Features.Stores.CreateStore;
 using ThriftMedia.Api.Features.Stores.GetAllStores;
 using ThriftMedia.Api.Features.Stores.GetStoreById;
 using ThriftMedia.Api.Features.Stores.RenameStore;
-using ThriftMedia.Application.DependencyInjection;
 using ThriftMedia.Infrastructure.DependencyInjection;
 //using ThriftMedia.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Register Application and Infrastructure layers
-builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add services to the container.
