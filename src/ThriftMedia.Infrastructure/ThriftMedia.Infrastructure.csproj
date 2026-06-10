@@ -22,5 +22,6 @@
     <ItemGroup>
       <Folder Include="Migrations\" />
       <Folder Include="Persistence\Models\" />
+      <Folder Include="Services\" />
     </ItemGroup>
 </Project>

@@ -23,11 +23,11 @@ public static class ServiceCollectionExtensions
         //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         // Register specific repositories
-        services.AddScoped<IMediaRepository, MediaRepository>();
-        services.AddScoped<IStoreRepository, StoreRepository>();
+        //services.AddScoped<IMediaRepository, MediaRepository>();
+        //services.AddScoped<IStoreRepository, StoreRepository>();
 
         // Register domain services
-        services.AddScoped<IMediaModerationService, MediaModerationService>();
+        //services.AddScoped<IMediaModerationService, MediaModerationService>();
 
         // Register application services
         //services.AddScoped<IOcrService, OcrService>();
