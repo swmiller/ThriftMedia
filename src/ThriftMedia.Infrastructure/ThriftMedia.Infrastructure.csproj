@@ -20,8 +20,6 @@
         <ProjectReference Include="..\ThriftMedia.Application\ThriftMedia.Application.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Migrations\" />
       <Folder Include="Persistence\Models\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 </Project>
