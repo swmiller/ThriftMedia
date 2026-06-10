@@ -22,10 +22,6 @@ public static class ServiceCollectionExtensions
 
         // Register media processing pipeline and steps
         services.AddTransient<MediaProcessingPipeline>();
-        services.AddTransient<IMediaProcessingStep, OcrProcessingStep>();
-        services.AddTransient<IMediaProcessingStep, MediaClassificationStep>();
-        services.AddTransient<IMediaProcessingStep, ContentModerationStep>();
-        services.AddTransient<IMediaProcessingStep, CatalogListingStep>();
 
         return services;
     }
