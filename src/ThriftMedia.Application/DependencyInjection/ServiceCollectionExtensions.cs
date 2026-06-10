@@ -16,6 +16,10 @@ public static class ServiceCollectionExtensions
             config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
         });
 
+        // Register validators from Application assembly (if using FluentValidation)
+        // TODO: AddValidatorsFromAssembly not found. Fix later when solution cleanup is done.
+        //services.AddValidatorsFromAssembly(Assembly.GetCallingAssembly());
+
         // Register media processing pipeline and steps
         services.AddTransient<MediaProcessingPipeline>();
         services.AddTransient<IMediaProcessingStep, OcrProcessingStep>();

@@ -5,7 +5,7 @@ namespace ThriftMedia.Api.Features.Stores.GetStoreById
 {
     public static class GetStoreByIdEndpoint
     {
-        public static IEndpointRouteBuilder MapGetStoreById(this IEndpointRouteBuilder app)
+        public static IEndpointRouteBuilder MapGetStoreByIdEndpoint(this IEndpointRouteBuilder app)
         {
             app.MapGet("/api/stores/{id:int}", async (int id, IMediator mediator, CancellationToken cancellationToken) =>
             {

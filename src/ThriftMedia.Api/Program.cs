@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using ThriftMedia.Api.Features.Stores.CreateStore;
 using ThriftMedia.Api.Features.Stores.GetAllStores;
+using ThriftMedia.Api.Features.Stores.GetStoreById;
+using ThriftMedia.Api.Features.Stores.RenameStore;
 using ThriftMedia.Application.DependencyInjection;
 using ThriftMedia.Infrastructure.DependencyInjection;
 //using ThriftMedia.Infrastructure.Persistence;
@@ -30,5 +33,8 @@ if (app.Environment.IsDevelopment())
 
 // Register store owner endpoints
 app.MapGetAllStoresEndpoint();
+app.MapGetStoreByIdEndpoint();
+app.MapCreateStoreEndpoint();
+app.MapRenameStoreEndpoint();
 
 app.Run();
