@@ -109,6 +109,75 @@ public sealed class Store
             createdBy,
             createdAt);
 
+    public static Store Rehydrate(
+        int id,
+        string storeName,
+        string? phoneNumber,
+        string? websiteUrl,
+        bool isActive,
+        bool isSuspended,
+        string? ownerFirstName,
+        string? ownerLastName,
+        string? ownerPhoneNumber,
+        string? ownerEmail,
+        string licenseNumber,
+        string licenseType,
+        string issueingAuthority,
+        DateTime issueDate,
+        DateTime? expirationDate,
+        string licenseStatus,
+        string address1,
+        string address2,
+        string city,
+        string postalCode,
+        string? country,
+        string createdBy,
+        DateTime createdAt,
+        string? updatedBy,
+        DateTime? updatedAt,
+        int appUserId,
+        string? provinceState)
+    {
+        var store = new Store(
+            storeName,
+            licenseNumber,
+            licenseType,
+            issueingAuthority,
+            issueDate,
+            expirationDate,
+            licenseStatus,
+            address1,
+            address2,
+            city,
+            postalCode,
+            country,
+            appUserId,
+            provinceState,
+            createdBy,
+            createdAt)
+        {
+            Id = ValidatePositive(id, nameof(Id)),
+            PhoneNumber = ValidateOptional(phoneNumber, nameof(PhoneNumber), 50),
+            WebsiteUrl = ValidateOptional(websiteUrl, nameof(WebsiteUrl), 255),
+            IsActive = isActive,
+            IsSuspended = isSuspended,
+            OwnerFirstName = ValidateOptional(ownerFirstName, nameof(OwnerFirstName), 50),
+            OwnerLastName = ValidateOptional(ownerLastName, nameof(OwnerLastName), 50),
+            OwnerPhoneNumber = ValidateOptional(ownerPhoneNumber, nameof(OwnerPhoneNumber), 50),
+            OwnerEmail = ValidateOptional(ownerEmail, nameof(OwnerEmail), 255),
+            UpdatedBy = ValidateOptional(updatedBy, nameof(UpdatedBy), 100),
+            UpdatedAt = updatedAt
+        };
+
+        if (store.WebsiteUrl is not null && !Uri.TryCreate(store.WebsiteUrl, UriKind.Absolute, out _))
+            throw new DomainValidationException("WebsiteUrl must be a valid absolute URI");
+
+        if (store.OwnerEmail is not null && !IsPlausibleEmail(store.OwnerEmail))
+            throw new DomainValidationException("OwnerEmail must be a valid email address");
+
+        return store;
+    }
+
     public void Rename(string newStoreName, string updatedBy, DateTime nowUtc)
     {
         StoreName = ValidateRequired(newStoreName, nameof(StoreName), 100);

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using ThriftMedia.Contracts.Requests;
+using ThriftMedia.Domain.Exceptions;
 using ThriftMedia.Mediator;
 
 namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
@@ -28,6 +29,13 @@ namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
                         );
 
                     return Results.ValidationProblem(errors);
+                }
+                catch (DomainValidationException ex)
+                {
+                    return Results.ValidationProblem(new Dictionary<string, string[]>
+                    {
+                        [nameof(ChangeStoreAddressRequest)] = [ex.Message]
+                    });
                 }
             })
             .WithName("ChangeStoreAddress")
