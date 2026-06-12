@@ -16,8 +16,4 @@
         <ProjectReference Include="..\ThriftMedia.Contracts\ThriftMedia.Contracts.csproj" />
         <ProjectReference Include="..\ThriftMedia.Infrastructure\ThriftMedia.Infrastructure.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Features\Stores\FlagExplicitContent\" />
-      <Folder Include="Features\Stores\SetBusinessLicenseImage\" />
-    </ItemGroup>
 </Project>
