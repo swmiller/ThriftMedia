@@ -26,17 +26,12 @@
 - Use **.NET Aspire** for app hosting and configuration, ensuring a clean separation of concerns.
 - Avoid using "AutoMapper". Instead generate "To" methods when the source object needs to be mapped to a different object type.
 - Use **Blazor** for building interactive web UIs, leveraging its component model.
-- Use **PostgreSQL** as the database, ensuring efficient data storage and retrieval.
+- Use **Microsoft SQL Server** as the database, ensuring efficient data storage and retrieval.
 - Use **Entity Framework Core** for data access, ensuring efficient and maintainable database interactions.
 - Use **Bootstrap** for web site layout and styling, ensuring responsive and consistent UI design.
 - Use **Docker containers** for all services in development and deployment:
-  - All infrastructure components (PostgreSQL) run as containers.
+  - All infrastructure components run as containers.
   - All application services run as containers for consistent environments.
   - Managed by .NET Aspire for orchestration.
 - Use **standard ASP.NET minimal web API architecture and best practices** for all web APIs, endpoints, and services.
-- Use **Akka.NET** and the **Actor Pattern** only for the media ingestion pipeline:
-  - The media ingestion pipeline uses Akka.NET actors for message-driven, scalable, and resilient processing.
-  - Akka.NET actor system is hosted within the API project and triggered by the media ingestion API endpoint.
-  - Each processing step in the media pipeline is implemented as an actor for isolation and fault tolerance.
-  - All other components (web APIs, Blazor apps) use standard ASP.NET Core patterns (not actors).
-- **Deployment**: All components are containerized using Docker for flexible deployment to Windows Servers or Azure.
+- **Deployment**: All components are containerized using Docker for flexible deployment to Windows Servers, Linux or Azure.
