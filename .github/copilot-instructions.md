@@ -11,11 +11,11 @@
   - LINQ for efficient data manipulation.
   - Comprehensive unit and integration testing.
   - Secure coding practices following OWASP guidelines.
-- Use **Vertical Slice Architecture** to organize features by business capability rather than technical concerns:
-  - Each feature (slice) contains all layers needed for that specific functionality.
-  - Keep related code together: API endpoint, command/query, handler, validation, and data access.
-  - Avoid unnecessary abstractions and over-engineering.
-  - Apply a **pragmatic approach** - extract common patterns only when duplication becomes problematic.
+- Use **Clean Architecture** to maintain clear boundaries between layers and enforce separation of concerns:
+  - Keep **Domain** and **Application** independent of frameworks and infrastructure details.
+  - Place persistence, external services, and implementation details in **Infrastructure**.
+  - Keep API/UI concerns in **Presentation** and depend inward on application abstractions.
+  - Enforce dependency direction toward the core and avoid leaking infrastructure concerns into business logic.
 - Implement **CQRS (Command Query Responsibility Segregation)** to separate read and write concerns.
 - Use **ThriftMedia.Mediator** (custom mediator pattern implementation) for CQRS:
   - Use `IMediator` interface for sending commands/queries and publishing events
