@@ -26,6 +26,7 @@ The public-facing website serves as the primary interface for consumers to disco
 
 - Consumers can browse content, media, and business listings without registration
 - Search and filter functionality for finding media items and businesses
+- Keyword search must support AND-based matching across metadata fields (e.g., title, description, author, publisher, and media format)
 - Advanced filtering options by category, location, price range, and availability
 - Responsive design optimized for desktop, tablet, and mobile web browsers
 
@@ -461,7 +462,9 @@ The system must meet the following performance benchmarks:
 #### 3.3.2 Scalability
 
 - Support at least 10,000 concurrent users across all platforms
-- Scalable containerized infrastructure with load balancing (Docker-based deployment)
+- Scalable containerized application infrastructure with load balancing (Docker-based deployment for stateless application services)
+- Database tier must run on external, OS-native PostgreSQL instances (not hosted in Docker containers)
+- Database lifecycle must be managed independently from application container deployments to prevent data loss during redeployments
 - Auto-scaling capabilities based on demand
 - Horizontal scaling for all stateless services
 
