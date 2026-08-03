@@ -4,13 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Use existing Microsoft SQL Server (not containerized)
+// Use existing external PostgreSQL database (not containerized)
 var thriftMediaDb = builder.AddConnectionString("ThriftMediaDb");
 
 var config = builder.Configuration;
 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// Register API project and reference Microsoft SQL Server database
+// Register API project and reference PostgreSQL database
 var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
     .WithReference(thriftMediaDb);
 

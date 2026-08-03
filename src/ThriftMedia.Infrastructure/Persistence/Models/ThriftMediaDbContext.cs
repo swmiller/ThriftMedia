@@ -31,10 +31,10 @@ public partial class ThriftMediaDbContext : DbContext
                 .IsUnique()
                 .HasFilter("([Role]=(0))");
 
-            entity.Property(e => e.CreatedAtUtc).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.CreatedAtUtc).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.DisplayName).HasMaxLength(200);
             entity.Property(e => e.Email).HasMaxLength(320);
-            entity.Property(e => e.LastSeenAtUtc).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.LastSeenAtUtc).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.Provider).HasMaxLength(200);
             entity.Property(e => e.ProviderSub).HasMaxLength(200);
         });
@@ -47,15 +47,15 @@ public partial class ThriftMediaDbContext : DbContext
 
             entity.Property(e => e.Condition).HasMaxLength(100);
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
             entity.Property(e => e.ImageUrl).HasMaxLength(500);
             entity.Property(e => e.IsTested).HasDefaultValue(false);
             entity.Property(e => e.MediaType).HasMaxLength(50);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.ShelfLocation).HasMaxLength(100);
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedAt).HasColumnType("timestamp without time zone");
             entity.Property(e => e.UpdatedBy).HasMaxLength(100);
 
             entity.HasOne(d => d.Store).WithMany(p => p.Media)
@@ -77,11 +77,11 @@ public partial class ThriftMediaDbContext : DbContext
             entity.Property(e => e.City).HasMaxLength(100);
             entity.Property(e => e.Country).HasMaxLength(100);
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
             entity.Property(e => e.CreatedBy).HasMaxLength(100);
-            entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
-            entity.Property(e => e.IssueDate).HasColumnType("datetime");
+            entity.Property(e => e.ExpirationDate).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.IssueDate).HasColumnType("timestamp without time zone");
             entity.Property(e => e.IssueingAuthority).HasMaxLength(100);
             entity.Property(e => e.LicenseNumber).HasMaxLength(100);
             entity.Property(e => e.LicenseStatus).HasMaxLength(20);
@@ -94,7 +94,7 @@ public partial class ThriftMediaDbContext : DbContext
             entity.Property(e => e.PostalCode).HasMaxLength(20);
             entity.Property(e => e.ProvinceState).HasMaxLength(50);
             entity.Property(e => e.StoreName).HasMaxLength(100);
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedAt).HasColumnType("timestamp without time zone");
             entity.Property(e => e.UpdatedBy).HasMaxLength(100);
             entity.Property(e => e.WebsiteUrl).HasMaxLength(255);
 
