@@ -1,11 +1,11 @@
 using ThriftMedia.Domain.Exceptions;
+using ThriftMedia.Domain.ValueObjects;
 
 namespace ThriftMedia.Domain.Entities;
 
-public sealed class Store
+public sealed class Store : Entity
 {
-    public int Id { get; private set; } // 0 until persistence assigns identity
-
+    public int Id { get; private set; }
     public string StoreName { get; private set; }
     public string? PhoneNumber { get; private set; }
     public string? WebsiteUrl { get; private set; }
@@ -21,17 +21,12 @@ public sealed class Store
     public DateTime IssueDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
     public string LicenseStatus { get; private set; }
-    public string Address1 { get; private set; }
-    public string Address2 { get; private set; }
-    public string City { get; private set; }
-    public string PostalCode { get; private set; }
-    public string? Country { get; private set; }
+    public Address Address { get; private set; }
     public string CreatedBy { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public string? UpdatedBy { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
     public int AppUserId { get; private set; }
-    public string? ProvinceState { get; private set; }
 
     private Store(
         string storeName,
@@ -41,13 +36,8 @@ public sealed class Store
         DateTime issueDate,
         DateTime? expirationDate,
         string licenseStatus,
-        string address1,
-        string address2,
-        string city,
-        string postalCode,
-        string? country,
+        Address address,
         int appUserId,
-        string? provinceState,
         string createdBy,
         DateTime createdAt)
     {
@@ -58,19 +48,12 @@ public sealed class Store
         IssueDate = issueDate;
         ExpirationDate = expirationDate;
         LicenseStatus = ValidateRequired(licenseStatus, nameof(LicenseStatus), 20);
-        Address1 = ValidateRequired(address1, nameof(Address1), 150);
-        Address2 = ValidateRequired(address2, nameof(Address2), 150);
-        City = ValidateRequired(city, nameof(City), 100);
-        PostalCode = ValidateRequired(postalCode, nameof(PostalCode), 20);
-        Country = ValidateOptional(country, nameof(Country), 100);
+        Address = address ?? throw new DomainValidationException("Address is required");
         AppUserId = ValidatePositive(appUserId, nameof(AppUserId));
-        ProvinceState = ValidateOptional(provinceState, nameof(ProvinceState), 50);
         CreatedBy = ValidateRequired(createdBy, nameof(CreatedBy), 100);
         CreatedAt = createdAt;
-
         IsActive = true;
         IsSuspended = false;
-
         ValidateDateRange(IssueDate, ExpirationDate);
     }
 
@@ -82,32 +65,37 @@ public sealed class Store
         DateTime issueDate,
         DateTime? expirationDate,
         string licenseStatus,
-        string address1,
-        string address2,
-        string city,
-        string postalCode,
-        string? country,
+        Address address,
         int appUserId,
-        string? provinceState,
         string createdBy,
-        DateTime createdAt)
-        => new(
-            storeName,
-            licenseNumber,
-            licenseType,
-            issueingAuthority,
-            issueDate,
-            expirationDate,
-            licenseStatus,
-            address1,
-            address2,
-            city,
-            postalCode,
-            country,
-            appUserId,
-            provinceState,
-            createdBy,
-            createdAt);
+        DateTime createdAt,
+        string? phoneNumber = null,
+        string? websiteUrl = null,
+        string? ownerFirstName = null,
+        string? ownerLastName = null,
+        string? ownerPhoneNumber = null,
+        string? ownerEmail = null)
+    {
+        var store = new Store(
+            storeName, licenseNumber, licenseType, issueingAuthority,
+            issueDate, expirationDate, licenseStatus, address, appUserId, createdBy, createdAt);
+
+        store.PhoneNumber = ValidateOptional(phoneNumber, nameof(PhoneNumber), 50);
+        store.WebsiteUrl = ValidateOptional(websiteUrl, nameof(WebsiteUrl), 255);
+
+        if (store.WebsiteUrl is not null && !Uri.TryCreate(store.WebsiteUrl, UriKind.Absolute, out _))
+            throw new DomainValidationException("WebsiteUrl must be a valid absolute URI");
+
+        store.OwnerFirstName = ValidateOptional(ownerFirstName, nameof(OwnerFirstName), 50);
+        store.OwnerLastName = ValidateOptional(ownerLastName, nameof(OwnerLastName), 50);
+        store.OwnerPhoneNumber = ValidateOptional(ownerPhoneNumber, nameof(OwnerPhoneNumber), 50);
+        store.OwnerEmail = ValidateOptional(ownerEmail, nameof(OwnerEmail), 255);
+
+        if (store.OwnerEmail is not null && !IsPlausibleEmail(store.OwnerEmail))
+            throw new DomainValidationException("OwnerEmail must be a valid email address");
+
+        return store;
+    }
 
     public static Store Rehydrate(
         int id,
@@ -126,35 +114,16 @@ public sealed class Store
         DateTime issueDate,
         DateTime? expirationDate,
         string licenseStatus,
-        string address1,
-        string address2,
-        string city,
-        string postalCode,
-        string? country,
+        Address address,
         string createdBy,
         DateTime createdAt,
         string? updatedBy,
         DateTime? updatedAt,
-        int appUserId,
-        string? provinceState)
+        int appUserId)
     {
         var store = new Store(
-            storeName,
-            licenseNumber,
-            licenseType,
-            issueingAuthority,
-            issueDate,
-            expirationDate,
-            licenseStatus,
-            address1,
-            address2,
-            city,
-            postalCode,
-            country,
-            appUserId,
-            provinceState,
-            createdBy,
-            createdAt)
+            storeName, licenseNumber, licenseType, issueingAuthority,
+            issueDate, expirationDate, licenseStatus, address, appUserId, createdBy, createdAt)
         {
             Id = ValidatePositive(id, nameof(Id)),
             PhoneNumber = ValidateOptional(phoneNumber, nameof(PhoneNumber), 50),
@@ -184,22 +153,9 @@ public sealed class Store
         MarkUpdated(updatedBy, nowUtc);
     }
 
-    public void ChangeAddress(
-        string address1,
-        string address2,
-        string city,
-        string postalCode,
-        string? provinceState,
-        string? country,
-        string updatedBy,
-        DateTime nowUtc)
+    public void ChangeAddress(Address address, string updatedBy, DateTime nowUtc)
     {
-        Address1 = ValidateRequired(address1, nameof(Address1), 150);
-        Address2 = ValidateRequired(address2, nameof(Address2), 150);
-        City = ValidateRequired(city, nameof(City), 100);
-        PostalCode = ValidateRequired(postalCode, nameof(PostalCode), 20);
-        ProvinceState = ValidateOptional(provinceState, nameof(ProvinceState), 50);
-        Country = ValidateOptional(country, nameof(Country), 100);
+        Address = address ?? throw new DomainValidationException("Address is required");
         MarkUpdated(updatedBy, nowUtc);
     }
 
@@ -249,7 +205,6 @@ public sealed class Store
         LicenseStatus = ValidateRequired(licenseStatus, nameof(LicenseStatus), 20);
         IssueDate = issueDate;
         ExpirationDate = expirationDate;
-
         ValidateDateRange(IssueDate, ExpirationDate);
         MarkUpdated(updatedBy, nowUtc);
     }
@@ -300,7 +255,6 @@ public sealed class Store
     private static string? ValidateOptional(string? value, string fieldName, int maxLength)
     {
         if (value is null) return null;
-
         var trimmed = value.Trim();
         if (trimmed.Length == 0) return null;
         if (trimmed.Length > maxLength) throw new DomainValidationException($"{fieldName} max length is {maxLength}");

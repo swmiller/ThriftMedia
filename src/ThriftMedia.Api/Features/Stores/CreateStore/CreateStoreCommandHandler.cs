@@ -1,7 +1,9 @@
-﻿using FluentValidation;
+using FluentValidation;
 using ThriftMedia.Contracts.Requests;
-using ThriftMedia.Infrastructure.Persistence.Models;
 using ThriftMedia.Mediator;
+using DomainStore = ThriftMedia.Domain.Entities.Store;
+using DomainAddress = ThriftMedia.Domain.ValueObjects.Address;
+using PersistenceStore = ThriftMedia.Infrastructure.Persistence.Models.Store;
 
 namespace ThriftMedia.Api.Features.Stores.CreateStore
 {
@@ -61,16 +63,15 @@ namespace ThriftMedia.Api.Features.Stores.CreateStore
             RuleFor(x => x.request.AppUserId)
                 .GreaterThan(0)
                 .WithMessage("App user ID must be a positive integer.");
-
         }
     }
 
     public class CreateStoreCommandHandler : IRequestHandler<CreateStoreCommand, int>
     {
-        private readonly ThriftMediaDbContext _dbContext;
+        private readonly ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext _dbContext;
         private readonly IValidator<CreateStoreCommand> _validator;
 
-        public CreateStoreCommandHandler(ThriftMediaDbContext dbContext, IValidator<CreateStoreCommand> validator)
+        public CreateStoreCommandHandler(ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext dbContext, IValidator<CreateStoreCommand> validator)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -80,40 +81,67 @@ namespace ThriftMedia.Api.Features.Stores.CreateStore
         {
             await _validator.ValidateAndThrowAsync(command, cancellationToken);
 
-            var createStoreRequest = command.request;
+            var req = command.request;
 
-            var store = new Store() 
+            var address = DomainAddress.Create(
+                req.Address1,
+                req.Address2,
+                req.City,
+                req.ProvinceState,
+                req.PostalCode,
+                req.Country ?? string.Empty);
+
+            var domainStore = DomainStore.Create(
+                req.StoreName,
+                req.LicenseNumber,
+                req.LicenseType,
+                req.IssueingAuthority,
+                req.IssueDate,
+                req.ExpirationDate,
+                req.LicenseStatus,
+                address,
+                req.AppUserId,
+                "system", // TODO: replace with authenticated user
+                DateTime.UtcNow,
+                phoneNumber: req.PhoneNumber,
+                websiteUrl: req.WebsiteUrl,
+                ownerFirstName: req.OwnerFirstName,
+                ownerLastName: req.OwnerLastName,
+                ownerPhoneNumber: req.OwnerPhoneNumber,
+                ownerEmail: req.OwnerEmail);
+
+            var persistenceStore = new PersistenceStore
             {
-                StoreName = createStoreRequest.StoreName,
-                PhoneNumber = createStoreRequest.PhoneNumber,
-                WebsiteUrl = createStoreRequest.WebsiteUrl,
-                OwnerFirstName = createStoreRequest.OwnerFirstName,
-                OwnerLastName = createStoreRequest.OwnerLastName,
-                OwnerPhoneNumber = createStoreRequest.OwnerPhoneNumber,
-                OwnerEmail = createStoreRequest.OwnerEmail,
-                LicenseNumber = createStoreRequest.LicenseNumber,
-                LicenseType = createStoreRequest.LicenseType,
-                IssueingAuthority = createStoreRequest.IssueingAuthority,
-                IssueDate = createStoreRequest.IssueDate,
-                ExpirationDate = createStoreRequest.ExpirationDate,
-                LicenseStatus = createStoreRequest.LicenseStatus,
-                Address1 = createStoreRequest.Address1,
-                Address2 = createStoreRequest.Address2,
-                City = createStoreRequest.City,
-                PostalCode = createStoreRequest.PostalCode,
-                Country = createStoreRequest.Country,
-                ProvinceState = createStoreRequest.ProvinceState,
-                AppUserId = createStoreRequest.AppUserId,
-                IsActive = true,
-                IsSuspended = false,
-                CreatedBy = "system", // TODO: replace with authenticated user
-                CreatedAt = DateTime.UtcNow
+                StoreName = domainStore.StoreName,
+                PhoneNumber = domainStore.PhoneNumber,
+                WebsiteUrl = domainStore.WebsiteUrl,
+                IsActive = domainStore.IsActive,
+                IsSuspended = domainStore.IsSuspended,
+                OwnerFirstName = domainStore.OwnerFirstName,
+                OwnerLastName = domainStore.OwnerLastName,
+                OwnerPhoneNumber = domainStore.OwnerPhoneNumber,
+                OwnerEmail = domainStore.OwnerEmail,
+                LicenseNumber = domainStore.LicenseNumber,
+                LicenseType = domainStore.LicenseType,
+                IssueingAuthority = domainStore.IssueingAuthority,
+                IssueDate = domainStore.IssueDate,
+                ExpirationDate = domainStore.ExpirationDate,
+                LicenseStatus = domainStore.LicenseStatus,
+                Address1 = domainStore.Address.Line1,
+                Address2 = domainStore.Address.Line2 ?? string.Empty,
+                City = domainStore.Address.City,
+                PostalCode = domainStore.Address.PostalCode,
+                Country = domainStore.Address.Country,
+                ProvinceState = domainStore.Address.ProvinceState,
+                AppUserId = domainStore.AppUserId,
+                CreatedBy = domainStore.CreatedBy,
+                CreatedAt = domainStore.CreatedAt,
             };
 
-            _dbContext.Stores.Add(store);
+            _dbContext.Stores.Add(persistenceStore);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return store.Id;
+            return persistenceStore.Id;
         }
     }
 }

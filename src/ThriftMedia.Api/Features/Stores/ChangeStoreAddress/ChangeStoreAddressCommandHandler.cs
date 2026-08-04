@@ -1,9 +1,9 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ThriftMedia.Contracts.Requests;
-using ThriftMedia.Infrastructure.Persistence.Models;
 using ThriftMedia.Mediator;
 using DomainStore = ThriftMedia.Domain.Entities.Store;
+using DomainAddress = ThriftMedia.Domain.ValueObjects.Address;
 using PersistenceStore = ThriftMedia.Infrastructure.Persistence.Models.Store;
 
 namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
@@ -25,10 +25,9 @@ namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
                 .WithMessage("Address line 1 must not exceed 150 characters.");
 
             RuleFor(x => x.Request.Address2)
-                .NotEmpty()
-                .WithMessage("Address line 2 is required.")
                 .MaximumLength(150)
-                .WithMessage("Address line 2 must not exceed 150 characters.");
+                .WithMessage("Address line 2 must not exceed 150 characters.")
+                .When(x => x.Request.Address2 is not null);
 
             RuleFor(x => x.Request.City)
                 .NotEmpty()
@@ -56,10 +55,10 @@ namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
     {
         private const string SystemUser = "system";
 
-        private readonly ThriftMediaDbContext _dbContext;
+        private readonly ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext _dbContext;
         private readonly IValidator<ChangeStoreAddressCommand> _validator;
 
-        public ChangeStoreAddressCommandHandler(ThriftMediaDbContext dbContext, IValidator<ChangeStoreAddressCommand> validator)
+        public ChangeStoreAddressCommandHandler(ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext dbContext, IValidator<ChangeStoreAddressCommand> validator)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -77,15 +76,15 @@ namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
 
             var domainStore = ToDomain(persistenceStore);
 
-            domainStore.ChangeAddress(
+            var newAddress = DomainAddress.Create(
                 command.Request.Address1,
-                command.Request.Address2!,
+                command.Request.Address2,
                 command.Request.City,
-                command.Request.PostalCode,
                 command.Request.ProvinceState,
-                command.Request.Country,
-                SystemUser,
-                DateTime.UtcNow);
+                command.Request.PostalCode,
+                command.Request.Country ?? string.Empty);
+
+            domainStore.ChangeAddress(newAddress, SystemUser, DateTime.UtcNow);
 
             ApplyDomainAddressChanges(persistenceStore, domainStore);
 
@@ -95,43 +94,31 @@ namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
         }
 
         private static DomainStore ToDomain(PersistenceStore store)
-            => DomainStore.Rehydrate(
-                store.Id,
-                store.StoreName,
-                store.PhoneNumber,
-                store.WebsiteUrl,
-                store.IsActive,
-                store.IsSuspended,
-                store.OwnerFirstName,
-                store.OwnerLastName,
-                store.OwnerPhoneNumber,
-                store.OwnerEmail,
-                store.LicenseNumber,
-                store.LicenseType,
-                store.IssueingAuthority,
-                store.IssueDate,
-                store.ExpirationDate,
-                store.LicenseStatus,
-                store.Address1,
-                store.Address2,
-                store.City,
-                store.PostalCode,
-                store.Country,
-                store.CreatedBy,
-                store.CreatedAt,
-                store.UpdatedBy,
-                store.UpdatedAt,
-                store.AppUserId,
-                store.ProvinceState);
+        {
+            var address = DomainAddress.Create(
+                store.Address1, store.Address2, store.City,
+                store.ProvinceState, store.PostalCode, store.Country ?? string.Empty);
+
+            return DomainStore.Rehydrate(
+                store.Id, store.StoreName, store.PhoneNumber, store.WebsiteUrl,
+                store.IsActive, store.IsSuspended,
+                store.OwnerFirstName, store.OwnerLastName, store.OwnerPhoneNumber, store.OwnerEmail,
+                store.LicenseNumber, store.LicenseType, store.IssueingAuthority,
+                store.IssueDate, store.ExpirationDate, store.LicenseStatus,
+                address,
+                store.CreatedBy, store.CreatedAt,
+                store.UpdatedBy, store.UpdatedAt,
+                store.AppUserId);
+        }
 
         private static void ApplyDomainAddressChanges(PersistenceStore persistenceStore, DomainStore domainStore)
         {
-            persistenceStore.Address1 = domainStore.Address1;
-            persistenceStore.Address2 = domainStore.Address2;
-            persistenceStore.City = domainStore.City;
-            persistenceStore.PostalCode = domainStore.PostalCode;
-            persistenceStore.ProvinceState = domainStore.ProvinceState;
-            persistenceStore.Country = domainStore.Country;
+            persistenceStore.Address1 = domainStore.Address.Line1;
+            persistenceStore.Address2 = domainStore.Address.Line2 ?? string.Empty;
+            persistenceStore.City = domainStore.Address.City;
+            persistenceStore.PostalCode = domainStore.Address.PostalCode;
+            persistenceStore.ProvinceState = domainStore.Address.ProvinceState;
+            persistenceStore.Country = domainStore.Address.Country;
             persistenceStore.UpdatedBy = domainStore.UpdatedBy;
             persistenceStore.UpdatedAt = domainStore.UpdatedAt;
         }

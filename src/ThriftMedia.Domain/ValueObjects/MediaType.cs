@@ -17,7 +17,7 @@ public sealed class MediaType : ValueObject
     public static readonly MediaType Magazine = new("magazine");
     public static readonly MediaType Comic = new("comic");
     public static readonly MediaType Other = new("other");
-    public static readonly MediaType Unknown = new("other");
+    public static readonly MediaType Unknown = new("unknown");
 
     public static IEnumerable<MediaType> All => new[]
     {

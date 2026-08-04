@@ -1,10 +1,11 @@
 using System.Text.Json;
+using ThriftMedia.Domain.Events;
 using ThriftMedia.Domain.Exceptions;
 using ThriftMedia.Domain.ValueObjects;
 
 namespace ThriftMedia.Domain.Entities;
 
-public sealed class Media
+public sealed class Media : Entity
 {
     public Guid Id { get; private set; }
     public int StoreId { get; private set; }
@@ -35,21 +36,14 @@ public sealed class Media
 
     public static Media Create(int storeId, Uri imageUri, string createdBy, DateTime nowUtc)
     {
-        // Validate StoreId
         if (storeId <= 0) throw new DomainValidationException("StoreId is required and must be a valid positive integer");
-
-        // Validate ImageUri
         if (imageUri is null) throw new DomainValidationException("ImageUri is required");
         if (!imageUri.IsAbsoluteUri) throw new DomainValidationException("Image URI must be absolute");
 
-        return new Media(
-            Guid.NewGuid(),
-            storeId,
-            MediaType.Unknown,
-            MediaStatus.Uploaded,
-            imageUri,
-            null,
-            AuditMetadata.Create(createdBy, nowUtc));
+        var id = Guid.NewGuid();
+        var media = new Media(id, storeId, MediaType.Unknown, MediaStatus.Uploaded, imageUri, null, AuditMetadata.Create(createdBy, nowUtc));
+        media.AddDomainEvent(new MediaUploadedEvent(id, storeId, imageUri));
+        return media;
     }
 
     public void StartProcessing(string updatedBy, DateTime nowUtc)
@@ -78,11 +72,8 @@ public sealed class Media
 
         Type = mediaType;
 
-        // If classification fails, pend for manual review
         if (mediaType == MediaType.Unknown)
-        {
             Status = MediaStatus.PendingClassification;
-        }
 
         Audit = Audit.WithUpdated(updatedBy, nowUtc);
     }
@@ -113,12 +104,14 @@ public sealed class Media
 
         Status = MediaStatus.Listed;
         Audit = Audit.WithUpdated(updatedBy, nowUtc);
+        AddDomainEvent(new MediaListedEvent(Id, StoreId));
     }
 
-    public void MarkAsFailed(string updatedBy, DateTime nowUtc)
+    public void MarkAsFailed(string reason, string updatedBy, DateTime nowUtc)
     {
         Status = MediaStatus.Failed;
         Audit = Audit.WithUpdated(updatedBy, nowUtc);
+        AddDomainEvent(new MediaProcessingFailedEvent(Id, StoreId, reason));
     }
 
     /// <summary>
@@ -131,6 +124,7 @@ public sealed class Media
         IsExplicitContent = true;
         Status = MediaStatus.Flagged;
         Audit = Audit.WithUpdated(updatedBy, nowUtc);
+        AddDomainEvent(new ExplicitContentDetectedEvent(Id, StoreId));
     }
 
     /// <summary>

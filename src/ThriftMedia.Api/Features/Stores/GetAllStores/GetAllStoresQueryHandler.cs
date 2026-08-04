@@ -15,11 +15,12 @@ namespace ThriftMedia.Api.Features.Stores.GetAllStores
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
+
         public async Task<IEnumerable<StoreDto>> Handle(GetAllStoresQuery request, CancellationToken cancellationToken)
         {
             var allStores = await _dbContext.Stores
                 .AsNoTracking()
-                .Select( s => new StoreDto(
+                .Select(s => new StoreDto(
                     s.Id,
                     s.StoreName,
                     s.PhoneNumber,
