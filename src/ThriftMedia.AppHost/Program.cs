@@ -10,6 +10,11 @@ var thriftMediaDb = builder.AddConnectionString("ThriftMediaDb");
 var config = builder.Configuration;
 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
+// Run DB migrations before services start
+var dbMigrator = builder.AddProject<Projects.ThriftMedia_DbMigrator>("db-migrator")
+    .WithReference(thriftMediaDb)
+    .WithExplicitStart();
+
 // Register API project and reference PostgreSQL database
 var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
     .WithReference(thriftMediaDb);

@@ -14,4 +14,7 @@
         <ProjectReference Include="..\ThriftMedia.Api\ThriftMedia.Api.csproj" />
         <ProjectReference Include="..\ThriftMedia.Web\ThriftMedia.Web.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\ThriftMedia.DbMigrator\ThriftMedia.DbMigrator.csproj" />
+    </ItemGroup>
 </Project>
