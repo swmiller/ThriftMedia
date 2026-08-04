@@ -16,6 +16,7 @@
   - Place persistence, external services, and implementation details in **Infrastructure**.
   - Keep API/UI concerns in **Presentation** and depend inward on application abstractions.
   - Enforce dependency direction toward the core and avoid leaking infrastructure concerns into business logic.
+- Use **Vertical Slice Architecture (VSA)** to organize by feature/use case, keeping commands, queries, handlers, validation, and endpoints cohesive per slice while still honoring Clean Architecture dependency rules.
 - Implement **CQRS (Command Query Responsibility Segregation)** to separate read and write concerns.
 - Use **ThriftMedia.Mediator** (custom mediator pattern implementation) for CQRS:
   - Use `IMediator` interface for sending commands/queries and publishing events

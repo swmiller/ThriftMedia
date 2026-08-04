@@ -39,7 +39,8 @@ Requirements include:
 
 ## Architecture and Technology Direction
 
-- Clean Architecture with CQRS separation
+- Vertical Slice Architecture (VSA) organized by feature/use case
+- Clean Architecture boundaries with CQRS separation
 - Custom mediator implementation: `ThriftMedia.Mediator` (in place of MediatR)
 - FluentValidation for validation
 - ASP.NET minimal APIs for service endpoints

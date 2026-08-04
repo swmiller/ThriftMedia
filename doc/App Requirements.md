@@ -554,6 +554,15 @@ The system must meet the following performance benchmarks:
 - Compliance with PCI DSS if payment processing is added in the future
 - Regular review and updates to security practices
 
+### 4.5 Solution Architecture
+
+- The solution uses **Vertical Slice Architecture (VSA)** to organize code by feature/use case rather than by technical layer alone.
+- VSA is implemented together with **Clean Architecture** boundaries:
+  - Domain and Application remain framework-independent
+  - Infrastructure contains persistence and external integrations
+  - Presentation handles API/UI concerns and depends inward
+- CQRS handlers, validation, and feature-specific behavior are implemented within slices to keep features cohesive, testable, and maintainable.
+
 ---
 
 ## 5. Appendices
@@ -578,6 +587,7 @@ The system must meet the following performance benchmarks:
 - **SIEM**: Security Information and Event Management
 - **SLA**: Service Level Agreement
 - **TLS**: Transport Layer Security
+- **VSA**: Vertical Slice Architecture
 - **WCAG**: Web Content Accessibility Guidelines
 - **XSS**: Cross-Site Scripting
 - **XXE**: XML External Entities
@@ -608,5 +618,5 @@ The system must meet the following performance benchmarks:
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: March 2026  
+**Last Updated**: August 2026  
 **Owner**: ThriftMedia Development Team
