@@ -7,8 +7,9 @@ var builder = DistributedApplication.CreateBuilder(args);
 // PostgreSQL runs in a Docker container.
 // Data files are bind-mounted to c:\ThriftMediaDb on the host so they
 // survive container restarts and redeployments.
+// For PostgreSQL 18+, mount /var/lib/postgresql (not /var/lib/postgresql/data).
 var postgres = builder.AddPostgres("postgres")
-    .WithBindMount(@"c:\ThriftMediaDb", "/var/lib/postgresql/data");
+    .WithBindMount(@"c:\ThriftMediaDb", "/var/lib/postgresql");
 
 var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
 
@@ -33,4 +34,3 @@ var web = builder.AddProject<Projects.ThriftMedia_Web>("web")
     .WithExternalHttpEndpoints();
 
 builder.Build().Run();
-
