@@ -4,20 +4,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Use existing external PostgreSQL database (not containerized)
-var thriftMediaDb = builder.AddConnectionString("ThriftMediaDb");
+// PostgreSQL runs in a Docker container.
+// Data files are bind-mounted to c:\ThriftMediaDb on the host so they
+// survive container restarts and redeployments.
+var postgres = builder.AddPostgres("postgres")
+    .WithBindMount(@"c:\ThriftMediaDb", "/var/lib/postgresql/data");
 
-var config = builder.Configuration;
-config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+var thriftMediaDb = postgres.AddDatabase("ThriftMediaDb");
 
-// Run DB migrations before services start
+// Run DB migrations after PostgreSQL is ready and before app services start.
 var dbMigrator = builder.AddProject<Projects.ThriftMedia_DbMigrator>("db-migrator")
     .WithReference(thriftMediaDb)
-    .WithExplicitStart();
+    .WaitFor(postgres);
 
-// Register API project and reference PostgreSQL database
+// Register API project — wait for migrations to finish before starting.
 var api = builder.AddProject<Projects.ThriftMedia_Api>("api")
-    .WithReference(thriftMediaDb);
+    .WithReference(thriftMediaDb)
+    .WaitForCompletion(dbMigrator);
 
 // Register Admin Portal (Blazor app - store administration)
 var admin = builder.AddProject<Projects.ThriftMedia_Admin>("admin")
@@ -30,3 +33,4 @@ var web = builder.AddProject<Projects.ThriftMedia_Web>("web")
     .WithExternalHttpEndpoints();
 
 builder.Build().Run();
+

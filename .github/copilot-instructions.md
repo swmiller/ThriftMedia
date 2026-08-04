@@ -29,9 +29,12 @@
 - Use **PostgreSQL** as the database, ensuring efficient data storage and retrieval.
 - Use **Dapper** (micro-ORM) for data access, ensuring efficient and maintainable database interactions.
 - Use **Bootstrap** for web site layout and styling, ensuring responsive and consistent UI design.
-- Use **Docker containers** for application services in development and deployment:
+- Use **Docker containers** for all services in development and deployment:
   - All application services run as containers for consistent environments.
-  - **PostgreSQL must remain external and native to the host OS** (not containerized).
-  - Managed by .NET Aspire for orchestration and external service connectivity.
+  - **PostgreSQL also runs as a Docker container** — the engine is containerized but the physical database files are bind-mounted to the host filesystem (`c:\ThriftMediaDb` on Windows, or equivalent) so data survives container restarts and redeployments.
+  - Managed by .NET Aspire for orchestration, including automatic container lifecycle and connection string injection.
+- Use **DbUp** for database schema migrations:
+  - Migration scripts are plain `.sql` files embedded in `ThriftMedia.DbMigrator`.
+  - The migrator runs automatically on startup via .NET Aspire, waiting for PostgreSQL to be ready before app services start.
 - Use **standard ASP.NET minimal web API architecture and best practices** for all web APIs, endpoints, and services.
-- **Deployment**: Application components are containerized using Docker for flexible deployment to Windows Servers, Linux or Azure, while the PostgreSQL database remains external and OS-native.
+- **Deployment**: All components are containerized using Docker for flexible deployment to Windows Servers, Linux or Azure. PostgreSQL runs as a container with host bind-mounted data files (`c:\ThriftMediaDb`) for persistence.

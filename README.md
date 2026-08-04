@@ -44,7 +44,8 @@ Requirements include:
 - FluentValidation for validation
 - ASP.NET minimal APIs for service endpoints
 - Blazor-based web experiences
-- Dapper with external, OS-native PostgreSQL as the system of record
+- Dapper with PostgreSQL (containerized engine, data files bind-mounted to `c:\ThriftMediaDb` on the host)
+- DbUp for database schema migrations
 - .NET Aspire orchestration and containerized deployment model
 
 ## Repository Structure
@@ -56,6 +57,7 @@ Requirements include:
 - **src/ThriftMedia.Application**: Application-layer use cases and CQRS handlers
 - **src/ThriftMedia.Domain**: Domain models, rules, and core business logic
 - **src/ThriftMedia.Infrastructure**: Dapper-based persistence and infrastructure implementations
+- **src/ThriftMedia.DbMigrator**: DbUp-based schema migration runner
 - **src/ThriftMedia.Mediator**: Custom mediator library used by CQRS
 - **src/ThriftMedia.ServiceDefaults**: Shared service defaults, telemetry, and resilience setup
 - **src/ThriftMedia.Tests**: Automated tests (xUnit)

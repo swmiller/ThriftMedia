@@ -463,8 +463,8 @@ The system must meet the following performance benchmarks:
 
 - Support at least 10,000 concurrent users across all platforms
 - Scalable containerized application infrastructure with load balancing (Docker-based deployment for stateless application services)
-- Database tier must run on external, OS-native PostgreSQL instances (not hosted in Docker containers)
-- Database lifecycle must be managed independently from application container deployments to prevent data loss during redeployments
+- PostgreSQL database engine runs in a Docker container; physical data files are bind-mounted to the host filesystem at `c:\ThriftMediaDb` (or equivalent OS path) to survive container restarts and redeployments
+- Database data lifecycle is decoupled from the container lifecycle — the container can be rebuilt or upgraded without data loss
 - Auto-scaling capabilities based on demand
 - Horizontal scaling for all stateless services
 
