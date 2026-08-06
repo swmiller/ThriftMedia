@@ -25,12 +25,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThriftMedia.Web", "src\Thri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThriftMedia.Mediator", "src\ThriftMedia.Mediator\ThriftMedia.Mediator.csproj", "{D37DEA22-09E5-440B-96A7-117696E1BE67}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{CBC3F9EE-02B4-4E09-B20E-C679F14CB52B}"
-	ProjectSection(SolutionItems) = preProject
-		doc\App Requirements.md = doc\App Requirements.md
-		README.md = README.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{0E9B1183-BD10-4C78-A4E3-EAF8EDE38564}"
 	ProjectSection(SolutionItems) = preProject
 		.github\copilot-instructions.md = .github\copilot-instructions.md
@@ -38,6 +32,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{0E9B
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThriftMedia.DbMigrator", "src\ThriftMedia.DbMigrator\ThriftMedia.DbMigrator.csproj", "{5EEE228F-0032-4F9B-8356-78B4E1989F6B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F896BF15-05A0-4578-B7A3-75F8DE5AFDDC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requirements", "Requirements", "{34C210FE-95D1-4A15-982C-7AED6CA94E1E}"
+	ProjectSection(SolutionItems) = preProject
+		docs\requirements\product-requirements.md = docs\requirements\product-requirements.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features", "Features", "{AD0102AD-0EDE-4DDA-88B4-9A06FDAC0F4A}"
+	ProjectSection(SolutionItems) = preProject
+		docs\requirements\features\authentication-authorization.md = docs\requirements\features\authentication-authorization.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adr", "Adr", "{A0372A0F-7BF6-4D30-A890-22D564026920}"
+	ProjectSection(SolutionItems) = preProject
+		docs\adr\0001-authentication-authorization-approach.md = docs\adr\0001-authentication-authorization-approach.md
+		docs\adr\README.md = docs\adr\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -197,6 +209,9 @@ Global
 		{C2B405BE-E0C1-4356-8D88-6104E56F116A} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{D37DEA22-09E5-440B-96A7-117696E1BE67} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{5EEE228F-0032-4F9B-8356-78B4E1989F6B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{34C210FE-95D1-4A15-982C-7AED6CA94E1E} = {F896BF15-05A0-4578-B7A3-75F8DE5AFDDC}
+		{AD0102AD-0EDE-4DDA-88B4-9A06FDAC0F4A} = {34C210FE-95D1-4A15-982C-7AED6CA94E1E}
+		{A0372A0F-7BF6-4D30-A890-22D564026920} = {F896BF15-05A0-4578-B7A3-75F8DE5AFDDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F8F1201-C07B-4701-95FE-276EBD4991EA}
