@@ -45,17 +45,18 @@ Requirements include:
 - FluentValidation for validation
 - ASP.NET minimal APIs for service endpoints
 - Blazor-based web experiences
-- Dapper with PostgreSQL (containerized engine, data files bind-mounted to `c:\ThriftMediaDb` on the host)
+- Dapper with PostgreSQL (containerized engine, data files bind-mounted to `c:\ThriftMediaDb` on the host). Dapper is the target data access approach; the existing Store handlers still use EF Core and are being migrated
 - DbUp for database schema migrations
 - .NET Aspire orchestration and containerized deployment model
 
 ## Repository Structure
 
-- **src/ThriftMedia.Web**: Public-facing Blazor WebAssembly UI
-- **src/ThriftMedia.Admin**: Business owner administration Blazor UI
-- **src/ThriftMedia.Api**: Minimal API endpoints and application-facing services
+- **src/ThriftMedia.Web**: Public-facing Blazor (interactive server) UI
+- **src/ThriftMedia.Admin**: Business owner administration Blazor (interactive server) UI
+- **src/ThriftMedia.Api**: Minimal API endpoints (the existing Store handlers currently also live here and are moving to Application)
 - **src/ThriftMedia.AppHost**: .NET Aspire distributed application orchestrator
-- **src/ThriftMedia.Application**: Application-layer use cases and CQRS handlers
+- **src/ThriftMedia.Application**: Target home for application-layer use cases and CQRS handlers (not yet populated or referenced)
+- **src/ThriftMedia.Contracts**: Request records and DTOs shared across the API boundary
 - **src/ThriftMedia.Domain**: Domain models, rules, and core business logic
 - **src/ThriftMedia.Infrastructure**: Dapper-based persistence and infrastructure implementations
 - **src/ThriftMedia.DbMigrator**: DbUp-based schema migration runner
@@ -63,7 +64,9 @@ Requirements include:
 - **src/ThriftMedia.ServiceDefaults**: Shared service defaults, telemetry, and resilience setup
 - **src/ThriftMedia.Tests**: Automated tests (xUnit)
 - **.github/**: Project instructions, workflows, and documentation
-- **doc/**: Product requirements and supporting documentation
+- **doc/**: Original product requirements
+- **docs/**: Requirements (`docs/requirements/`) and architecture decision records (`docs/adr/`)
+- **CLAUDE.md**: Guidance for Claude Code, including known gaps between the docs and the code
 
 ## Getting Started
 
@@ -79,7 +82,7 @@ Requirements include:
 
 ## Contributing
 
-- Follow coding and architecture standards in `.github/copilot-instructions.md`
+- Follow coding and architecture standards in `.github/copilot-instructions.md` and `CLAUDE.md`
 - Treat `doc/App Requirements.md` as the primary requirements source
 - Keep README and related documentation aligned when requirements change
 
