@@ -10,7 +10,7 @@ Distributed platform for discovering local thrift store inventory and driving in
 - **Dapper** for data access; **DbUp** for schema (see Known Gaps)
 - **ThriftMedia.Mediator** for CQRS. This is a custom library, not MediatR; see `src/ThriftMedia.Mediator/README.md`
 - FluentValidation; xUnit
-- Auth (planned): ASP.NET Core Identity, JWT bearer, external OAuth providers; see `docs/requirements/features/authentication-authorization.md` and `docs/adr/0001-authentication-authorization-approach.md` (status: Proposed)
+- Auth (planned): federated sign-in only (Google, Microsoft via ASP.NET Core OIDC handlers), cookie sessions in the Blazor apps, short-lived JWTs minted by the apps for API calls. No ASP.NET Core Identity, no hosted broker, no local passwords; authorization data lives in our own Dapper tables. See `docs/requirements/features/authentication-authorization.md` and `docs/adr/0001-authentication-authorization-approach.md` (status: Accepted)
 
 ## Architecture
 
@@ -59,10 +59,9 @@ Rules:
 
 The code doesn't match the architecture above yet. Follow the architecture for new work, and don't copy these patterns:
 
-- **EF Core has been removed.** The `ThriftMediaDbContext`, scaffolded EF entities, and the Npgsql EF package are gone. The Store handlers are commented out (marked `TODO: EF Core removed`) until reimplemented with Dapper, which isn't installed yet. Store endpoints compile but have no handlers.
-- **Api startup is incomplete.** `Api/Program.cs` doesn't call `AddServiceDefaults`, `AddMediator`, or register validators or a data access service.
-- **`src/ThriftMedia.Tests` has no tests yet.** It references both `xunit` and `xunit.v3`.
-- **Identity storage is undecided.** ASP.NET Core Identity's default stores use EF Core, so using Identity with Dapper requires custom stores or a documented exception. Ask before implementing.
+- **EF Core has been removed.** The `ThriftMediaDbContext`, scaffolded EF entities, and the Npgsql EF package are gone. The Store handlers are commented out (marked `TODO: EF Core removed`) until reimplemented with Dapper (now installed; `IDbConnectionFactory` in Infrastructure provides connections). Store endpoints compile but have no handlers.
+- **Test coverage is partial.** `src/ThriftMedia.Tests` (xunit 2.x; `xunit.v3` removed) covers Domain, Application handlers and the Api's authentication/authorization pipeline (in-memory repositories via `WebApplicationFactory`). Nothing tests the Dapper repositories, the DbUp scripts or the Admin sign-in flow against real Postgres/providers yet (needs Docker).
+- **Auth is not implemented yet.** The approach is decided (ADR 0001): no Identity, no stores for credentials. The Api (JWT validation, policies, account endpoints) and the Admin app (cookie sign-in, token minting, placeholder pages) are wired but not yet exercised end to end: provider credentials, signing key and System Admin settings are supplied in step 10.
 
 ## Commands
 

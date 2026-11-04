@@ -20,7 +20,7 @@ The platform business model is ad-supported (initially Google Ads), and the prod
 - Location-aware discovery with configurable radius and manual location override
 - Promotion/event visibility and time-sensitive offers
 - Rich keyword search with all keywords AND'ed together for relevance
-- Role-based business access (**Owner** and **Worker**) scoped to authorized businesses only
+- Role-based business access (**Store Admin** now; **Worker** role deferred) scoped to authorized businesses only
 - Platform-level business account approval, suspension, and reactivation workflows
 - Automated ingestion and processing pipeline for uploaded media, validation, moderation, and monitoring
 - Secure API/integration support for real-time and scheduled data updates
@@ -30,7 +30,7 @@ The platform business model is ad-supported (initially Google Ads), and the prod
 Requirements include:
 
 - OWASP-aligned secure coding and strong input/output protection
-- OAuth 2.0-based authentication and authorization controls
+- Federated sign-in (Google, Microsoft) with secure cookie sessions and short-lived API tokens; server-side authorization scoped to the caller's store (see `docs/adr/0001-authentication-authorization-approach.md`)
 - Encryption in transit (TLS 1.2+) and at rest
 - Auditing, logging, observability, and anomaly/security monitoring
 - WCAG 2.1 AA accessibility targets

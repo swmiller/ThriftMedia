@@ -91,17 +91,16 @@ The business owner administration website provides secure access for store owner
 
 #### 2.2.1 Authentication and Access Control
 
-- Secure login for business owners via OAuth 2.0
+- Secure login for business owners via federated OpenID Connect / OAuth 2.0
 - Support for third-party consumer identity providers:
   - Google (Gmail accounts)
   - Microsoft (Outlook/personal Microsoft accounts)
-  - Other consumer identity providers as needed
 - No support required for enterprise identity providers (Azure AD/Entra ID)
-- Support for both local accounts (email and password) and federated authentication
-- Access management for multiple business team members within the same business
+- Federated authentication only; ThriftMedia does not offer local email/password accounts or store passwords (see `docs/adr/0001-authentication-authorization-approach.md`)
+- Access management for multiple business team members within the same business (deferred; initially the Store Admin is the only sign-in for a store)
 - Role-based permissions scoped to the business account:
-  - **Owner**: Full access to manage all business attributes (profile, settings, team management) and media inventory
-  - **Worker**: Limited access to manage media inventory only (cannot modify business profile or settings)
+  - **Store Admin** (initial release): Full access to manage all business attributes (profile, settings) and media inventory. The only sign-in to a store's pages
+  - **Worker** (deferred): Limited access to manage media inventory only (cannot modify business profile or settings); not part of the initial release
 - Users can only access and manage businesses they are explicitly granted permission to
 
 #### 2.2.2 Business Profile Management
@@ -149,15 +148,14 @@ The platform administration capabilities provide global management and oversight
 
 #### 2.3.1 Authentication and Access Control
 
-- Secure login for platform administrators via OAuth 2.0
+- Secure login for platform administrators via federated OpenID Connect / OAuth 2.0
 - Support for third-party consumer identity providers:
   - Google (Gmail accounts)
   - Microsoft (Outlook/personal Microsoft accounts)
-  - Other consumer identity providers as needed
 - Same authentication mechanisms as business owners for consistency
 - Role-based permissions:
-  - **Platform Administrator**: Full platform-wide access to all administrative functions
-- Multi-factor authentication (MFA) required for all administrator accounts
+  - **System Admin**: Full platform-wide access to all administrative functions. Initially a single allowlisted account
+- Multi-factor authentication (MFA) required for all administrator accounts, enforced on the administrator's Google/Microsoft account (the API checks the `amr` claim when the provider supplies it)
 - Administrator access is audited and logged comprehensively
 
 #### 2.3.2 Business Account Management
@@ -336,9 +334,9 @@ Security is paramount across all ThriftMedia components. The following requireme
 
 #### 3.1.1 Authentication and Authorization
 
-- All authentication and authorization must utilize OAuth 2.0 flows with best practices for token security
+- All authentication must utilize federated OpenID Connect / OAuth 2.0 flows with best practices for token security
 - Secure token storage and transmission
-- Token expiration and refresh mechanisms
+- Short-lived API access tokens minted from a secure cookie session; session expiration policies (no separate refresh tokens)
 - Session hijacking prevention
 
 #### 3.1.2 Encryption
@@ -365,7 +363,7 @@ Security is paramount across all ThriftMedia components. The following requireme
 #### 3.1.5 Attack Prevention
 
 - Implement rate limiting to prevent brute-force attacks
-- Account lockout mechanisms after failed authentication attempts
+- Account lockout after failed authentication attempts is delegated to the identity providers (Google, Microsoft); ThriftMedia has no local credentials
 - CAPTCHA for suspicious activities
 - Distributed Denial of Service (DDoS) protection
 
@@ -388,8 +386,7 @@ All development must adhere to OWASP Top Ten security principles:
 
 #### 3.2.2 Authentication & Session Management
 
-- Enforce strong password policies (minimum length, complexity requirements)
-- Secure password storage using industry-standard hashing (bcrypt, Argon2)
+- Not applicable: ThriftMedia stores no passwords (federated sign-in only); password policy and hashing are delegated to the identity providers
 - Secure session handling with appropriate timeouts
 
 #### 3.2.3 Sensitive Data Exposure
