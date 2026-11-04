@@ -1,0 +1,66 @@
+@page "/whoami"
+@attribute [Authorize]
+@inject IWebHostEnvironment Environment
+@inject AuthenticationStateProvider AuthState
+@inject ApiTokenProvider Tokens
+
+<PageTitle>Who am I</PageTitle>
+
+<div class="container mt-4">
+    <h1>Who am I</h1>
+
+    @if (!Environment.IsDevelopment())
+    {
+        <p>This page is available in development only.</p>
+    }
+    else
+    {
+        <h5>Session cookie claims</h5>
+        <table class="table table-sm">
+            @foreach (var c in sessionClaims)
+            {
+                <tr><td>@c.Key</td><td>@c.Value</td></tr>
+            }
+        </table>
+
+        <h5>Api token claims (freshly minted)</h5>
+        @if (tokenClaims is null)
+        {
+            <p class="text-danger">No token could be minted: the Api says this account may not sign in, or the Api is unreachable.</p>
+        }
+        else
+        {
+            <table class="table table-sm">
+                @foreach (var c in tokenClaims)
+                {
+                    <tr><td>@c.Key</td><td>@c.Value</td></tr>
+                }
+            </table>
+        }
+    }
+</div>
+
+@code {
+    private List<KeyValuePair<string, string>> sessionClaims = [];
+    private List<KeyValuePair<string, string>>? tokenClaims;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Environment.IsDevelopment()) return;
+
+        var state = await AuthState.GetAuthenticationStateAsync();
+        sessionClaims = state.User.Claims.Select(c => new KeyValuePair<string, string>(c.Type, c.Value)).ToList();
+
+        string? token;
+        try { token = await Tokens.GetUserTokenAsync(CancellationToken.None); }
+        catch (HttpRequestException) { token = null; }
+        if (token is null) return;
+
+        var payload = token.Split('.')[1].Replace('-', '+').Replace('_', '/');
+        payload = payload.PadRight(payload.Length + (4 - payload.Length % 4) % 4, '=');
+        using var doc = System.Text.Json.JsonDocument.Parse(Convert.FromBase64String(payload));
+        tokenClaims = doc.RootElement.EnumerateObject()
+            .Select(p => new KeyValuePair<string, string>(p.Name, p.Value.ToString()))
+            .ToList();
+    }
+}

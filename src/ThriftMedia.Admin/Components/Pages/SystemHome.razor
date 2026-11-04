@@ -1,0 +1,42 @@
+@page "/system"
+@attribute [Authorize(Policy = AdminPolicies.SystemAdmin)]
+@inject AdminApiClient Api
+
+<PageTitle>System administration</PageTitle>
+
+<div class="container mt-4">
+    <h1>System administration</h1>
+    <p class="text-muted">Placeholder landing page for the System Admin.</p>
+
+    <div class="card" style="max-width: 28rem;">
+        <div class="card-body">
+            <h5 class="card-title">Pending store applications</h5>
+            @if (error is not null)
+            {
+                <p class="text-danger mb-0">@error</p>
+            }
+            else
+            {
+                <p class="display-6 mb-0">@pendingCount</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private int pendingCount;
+    private string? error;
+
+    // Static server rendering: this also proves the minted token is accepted by the Api's SystemAdmin policy.
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            pendingCount = (await Api.GetPendingApplicationsAsync(CancellationToken.None)).Count;
+        }
+        catch (Exception ex) when (ex is HttpRequestException or UnauthorizedAccessException)
+        {
+            error = "Could not load pending applications from the Api.";
+        }
+    }
+}

@@ -1,0 +1,23 @@
+@page "/access-denied"
+
+<PageTitle>Access denied</PageTitle>
+
+<div class="container mt-4">
+    <h1>We couldn't sign you in</h1>
+    <p>@Message</p>
+    <a href="/signin" class="btn btn-outline-primary">Try again</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery] private string? Reason { get; set; }
+
+    // Deliberately generic for NotRegistered so the page doesn't reveal which emails have accounts.
+    private string Message => Reason switch
+    {
+        "Suspended" => "This account is suspended. Please contact ThriftMedia support.",
+        "EmailNotVerified" => "Your sign-in provider did not confirm your email address. Verify it with the provider and try again.",
+        "MfaRequired" => "This account requires multi-factor authentication on your sign-in provider.",
+        "Unavailable" => "Sign-in is temporarily unavailable. Please try again shortly.",
+        _ => "We couldn't match this sign-in to an approved account. If your store application is still pending, you'll receive an email when it's approved."
+    };
+}

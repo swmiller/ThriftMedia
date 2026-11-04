@@ -1,3 +1,4 @@
+using ThriftMedia.Admin.Auth;
 using ThriftMedia.Admin.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,9 @@ builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddSingleton(TimeProvider.System);
+builder.AddAdminAuthentication();
 
 var app = builder.Build();
 
@@ -23,9 +27,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
+app.MapAuthEndpoints();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

@@ -1,0 +1,22 @@
+@page "/store"
+@attribute [Authorize(Policy = AdminPolicies.StoreMember)]
+
+<PageTitle>My store</PageTitle>
+
+<div class="container mt-4">
+    <h1>My store</h1>
+    <p class="text-muted">Placeholder landing page for Store Admins.</p>
+
+    <AuthorizeView>
+        <dl class="row">
+            <dt class="col-sm-3">Signed in as</dt>
+            <dd class="col-sm-9">@context.User.Identity?.Name</dd>
+            <dt class="col-sm-3">Role</dt>
+            <dd class="col-sm-9">@context.User.FindFirst(AdminClaims.Role)?.Value</dd>
+            <dt class="col-sm-3">Store id</dt>
+            <dd class="col-sm-9">@(context.User.FindFirst(AdminClaims.StoreId)?.Value ?? "none")</dd>
+        </dl>
+    </AuthorizeView>
+
+    <a href="/media" class="btn btn-outline-primary">Media</a>
+</div>

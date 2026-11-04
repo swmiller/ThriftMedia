@@ -1,0 +1,31 @@
+@using Microsoft.AspNetCore.Authentication
+@inject IAuthenticationSchemeProvider Schemes
+
+@if (providers.Count == 0)
+{
+    <div class="alert alert-warning">
+        No sign-in providers are configured. Set <code>Authentication:Google:ClientId/ClientSecret</code>
+        and/or <code>Authentication:Microsoft:ClientId/ClientSecret</code>.
+    </div>
+}
+else
+{
+    <div class="d-flex gap-2">
+        @foreach (var provider in providers)
+        {
+            <a class="btn btn-outline-primary" href="/signin/@provider.ToLowerInvariant()" data-enhance-nav="false">
+                Sign in with @provider
+            </a>
+        }
+    </div>
+}
+
+@code {
+    private List<string> providers = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var all = await Schemes.GetAllSchemesAsync();
+        providers = all.Select(s => s.Name).Where(n => n is "Google" or "Microsoft").Order().ToList();
+    }
+}

@@ -6,10 +6,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="10.0.0" />
+      <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.0.1" />
       <PackageReference Include="OpenTelemetry.Api" Version="1.17.0" />
       <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\ThriftMedia.ServiceDefaults\ThriftMedia.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\ThriftMedia.Contracts\ThriftMedia.Contracts.csproj" />
     </ItemGroup>
 </Project>
