@@ -8,13 +8,9 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.10" />
         <PackageReference Include="FluentValidation" Version="12.1.1" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\ThriftMedia.Domain\ThriftMedia.Domain.csproj" />
         <ProjectReference Include="..\ThriftMedia.Mediator\ThriftMedia.Mediator.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Persistence\Models\" />
     </ItemGroup>
 </Project>

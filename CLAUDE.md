@@ -59,7 +59,7 @@ Rules:
 
 The code doesn't match the architecture above yet. Follow the architecture for new work, and don't copy these patterns:
 
-- **EF Core is legacy.** Store handlers use `ThriftMediaDbContext` directly, and the Dapper package isn't installed yet. The context also still carries SQL Server-specific mappings.
+- **EF Core has been removed.** The `ThriftMediaDbContext`, scaffolded EF entities, and the Npgsql EF package are gone. The Store handlers are commented out (marked `TODO: EF Core removed`) until reimplemented with Dapper, which isn't installed yet. Store endpoints compile but have no handlers.
 - **Store slices are in the wrong place.** Their handlers and validators live in `ThriftMedia.Api/Features/Stores` and should move to Application.
 - **`ThriftMedia.Application` isn't wired in.** It has no code, isn't in `ThriftMedia.sln`, and isn't referenced by Api.
 - **Api startup is incomplete.** `Api/Program.cs` doesn't call `AddServiceDefaults`, `AddMediator`, or register validators or a data access service.

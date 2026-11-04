@@ -45,7 +45,7 @@ Requirements include:
 - FluentValidation for validation
 - ASP.NET minimal APIs for service endpoints
 - Blazor-based web experiences
-- Dapper with PostgreSQL (containerized engine, data files bind-mounted to `c:\ThriftMediaDb` on the host). Dapper is the target data access approach; the existing Store handlers still use EF Core and are being migrated
+- Dapper with PostgreSQL (containerized engine, data files bind-mounted to `c:\ThriftMediaDb` on the host). Dapper is the target data access approach; EF Core has been removed and the Store handlers are commented out until they are reimplemented with Dapper
 - DbUp for database schema migrations
 - .NET Aspire orchestration and containerized deployment model
 

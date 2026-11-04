@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using ThriftMedia.Api.Features.Stores.ChangeStoreAddress;
 using ThriftMedia.Api.Features.Stores.CreateStore;
