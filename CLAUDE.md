@@ -53,6 +53,7 @@ Rules:
 - `doc/App Requirements.md`: primary requirements source
 - `docs/requirements/`: product and feature requirements
 - `docs/adr/`: architecture decisions; add one as `NNNN-short-title.md` for decisions that affect implementation direction
+- `docs/punch-list.md`: open issues and gaps; `docs/launch-guide.md`: secrets and settings to run in Visual Studio; `docs/oauth-provider-registration.md`: Google and Microsoft app registration
 - `.github/copilot-instructions.md`: coding standards shared with Copilot; keep consistent with this file
 
 ## Known Gaps

@@ -65,7 +65,7 @@ Requirements include:
 - **src/ThriftMedia.Tests**: Automated tests (xUnit)
 - **.github/**: Project instructions, workflows, and documentation
 - **doc/**: Original product requirements
-- **docs/**: Requirements (`docs/requirements/`) and architecture decision records (`docs/adr/`)
+- **docs/**: Requirements (`docs/requirements/`) and architecture decision records (`docs/adr/`); plus `docs/punch-list.md` (open issues), `docs/launch-guide.md` (running locally) and `docs/oauth-provider-registration.md` (Google/Microsoft setup)
 - **CLAUDE.md**: Guidance for Claude Code, including known gaps between the docs and the code
 
 ## Getting Started
