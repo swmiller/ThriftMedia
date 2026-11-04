@@ -7,7 +7,7 @@ namespace ThriftMedia.Api.Features.Stores.DeleteStore
     {
         public static IEndpointRouteBuilder MapDeleteStoreEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapDelete("/stores/{id:int}", async (int id, IMediator mediator, CancellationToken cancellationToken) =>
+            app.MapDelete("/api/stores/{id:int}", async (int id, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 try
                 {

@@ -8,7 +8,7 @@ namespace ThriftMedia.Api.Features.Stores.RenameStore
     {
         public static IEndpointRouteBuilder MapRenameStoreEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapPut("/stores/{id:int}/name", async (int id, RenameStoreRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            app.MapPut("/api/stores/{id:int}/name", async (int id, RenameStoreRequest request, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 try
                 {
