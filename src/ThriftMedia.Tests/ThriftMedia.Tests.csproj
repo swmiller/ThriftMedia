@@ -13,17 +13,23 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
         <PackageReference Include="xunit" Version="2.9.3" />
         <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="xunit.v3" Version="3.2.2" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\ThriftMedia.AppHost\ThriftMedia.AppHost.csproj" />
         <ProjectReference Include="..\ThriftMedia.Domain\ThriftMedia.Domain.csproj" />
+        <ProjectReference Include="..\ThriftMedia.Application\ThriftMedia.Application.csproj" />
+        <ProjectReference Include="..\ThriftMedia.Contracts\ThriftMedia.Contracts.csproj" />
+        <ProjectReference Include="..\ThriftMedia.Mediator\ThriftMedia.Mediator.csproj" />
+        <ProjectReference Include="..\ThriftMedia.Api\ThriftMedia.Api.csproj" />
+        <ProjectReference Include="..\ThriftMedia.Admin\ThriftMedia.Admin.csproj" Aliases="AdminApp" />
+        <ProjectReference Include="..\ThriftMedia.Infrastructure\ThriftMedia.Infrastructure.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Using Include="System.Net" />
