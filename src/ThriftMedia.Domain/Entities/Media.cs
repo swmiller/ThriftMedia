@@ -42,7 +42,7 @@ public sealed class Media : Entity
 
         var id = Guid.NewGuid();
         var media = new Media(id, storeId, MediaType.Unknown, MediaStatus.Uploaded, imageUri, null, AuditMetadata.Create(createdBy, nowUtc));
-        media.AddDomainEvent(new MediaUploadedEvent(id, storeId, imageUri));
+        media.AddDomainEvent(new MediaUploadedEvent(id, storeId, imageUri, nowUtc));
         return media;
     }
 
@@ -104,14 +104,14 @@ public sealed class Media : Entity
 
         Status = MediaStatus.Listed;
         Audit = Audit.WithUpdated(updatedBy, nowUtc);
-        AddDomainEvent(new MediaListedEvent(Id, StoreId));
+        AddDomainEvent(new MediaListedEvent(Id, StoreId, nowUtc));
     }
 
     public void MarkAsFailed(string reason, string updatedBy, DateTime nowUtc)
     {
         Status = MediaStatus.Failed;
         Audit = Audit.WithUpdated(updatedBy, nowUtc);
-        AddDomainEvent(new MediaProcessingFailedEvent(Id, StoreId, reason));
+        AddDomainEvent(new MediaProcessingFailedEvent(Id, StoreId, reason, nowUtc));
     }
 
     /// <summary>
@@ -124,7 +124,7 @@ public sealed class Media : Entity
         IsExplicitContent = true;
         Status = MediaStatus.Flagged;
         Audit = Audit.WithUpdated(updatedBy, nowUtc);
-        AddDomainEvent(new ExplicitContentDetectedEvent(Id, StoreId));
+        AddDomainEvent(new ExplicitContentDetectedEvent(Id, StoreId, nowUtc));
     }
 
     /// <summary>

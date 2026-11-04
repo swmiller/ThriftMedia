@@ -30,11 +30,13 @@ namespace ThriftMedia.Api.Features.Stores.RenameStore
     {
         private readonly ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext _dbContext;
         private readonly IValidator<RenameStoreCommand> _validator;
+        private readonly TimeProvider _timeProvider;
 
-        public RenameStoreCommandHandler(ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext dbContext, IValidator<RenameStoreCommand> validator)
+        public RenameStoreCommandHandler(ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext dbContext, IValidator<RenameStoreCommand> validator, TimeProvider timeProvider)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
 
         public async Task<bool> Handle(RenameStoreCommand command, CancellationToken cancellationToken)
@@ -48,7 +50,7 @@ namespace ThriftMedia.Api.Features.Stores.RenameStore
                 return false;
 
             var domainStore = ToDomain(persistenceStore);
-            domainStore.Rename(command.Request.NewStoreName, "system", DateTime.UtcNow); // TODO: replace with authenticated user
+            domainStore.Rename(command.Request.NewStoreName, "system", _timeProvider.GetUtcNow().UtcDateTime); // TODO: replace with authenticated user
 
             persistenceStore.StoreName = domainStore.StoreName;
             persistenceStore.UpdatedBy = domainStore.UpdatedBy;

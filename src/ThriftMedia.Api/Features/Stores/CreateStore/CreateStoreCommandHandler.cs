@@ -70,11 +70,13 @@ namespace ThriftMedia.Api.Features.Stores.CreateStore
     {
         private readonly ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext _dbContext;
         private readonly IValidator<CreateStoreCommand> _validator;
+        private readonly TimeProvider _timeProvider;
 
-        public CreateStoreCommandHandler(ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext dbContext, IValidator<CreateStoreCommand> validator)
+        public CreateStoreCommandHandler(ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext dbContext, IValidator<CreateStoreCommand> validator, TimeProvider timeProvider)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
 
         public async Task<int> Handle(CreateStoreCommand command, CancellationToken cancellationToken)
@@ -102,7 +104,7 @@ namespace ThriftMedia.Api.Features.Stores.CreateStore
                 address,
                 req.AppUserId,
                 "system", // TODO: replace with authenticated user
-                DateTime.UtcNow,
+                _timeProvider.GetUtcNow().UtcDateTime,
                 phoneNumber: req.PhoneNumber,
                 websiteUrl: req.WebsiteUrl,
                 ownerFirstName: req.OwnerFirstName,

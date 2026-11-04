@@ -57,11 +57,13 @@ namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
 
         private readonly ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext _dbContext;
         private readonly IValidator<ChangeStoreAddressCommand> _validator;
+        private readonly TimeProvider _timeProvider;
 
-        public ChangeStoreAddressCommandHandler(ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext dbContext, IValidator<ChangeStoreAddressCommand> validator)
+        public ChangeStoreAddressCommandHandler(ThriftMedia.Infrastructure.Persistence.Models.ThriftMediaDbContext dbContext, IValidator<ChangeStoreAddressCommand> validator, TimeProvider timeProvider)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
 
         public async Task<bool> Handle(ChangeStoreAddressCommand command, CancellationToken cancellationToken)
@@ -84,7 +86,7 @@ namespace ThriftMedia.Api.Features.Stores.ChangeStoreAddress
                 command.Request.PostalCode,
                 command.Request.Country ?? string.Empty);
 
-            domainStore.ChangeAddress(newAddress, SystemUser, DateTime.UtcNow);
+            domainStore.ChangeAddress(newAddress, SystemUser, _timeProvider.GetUtcNow().UtcDateTime);
 
             ApplyDomainAddressChanges(persistenceStore, domainStore);
 
