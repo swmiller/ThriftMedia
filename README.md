@@ -53,9 +53,9 @@ Requirements include:
 
 - **src/ThriftMedia.Web**: Public-facing Blazor (interactive server) UI
 - **src/ThriftMedia.Admin**: Business owner administration Blazor (interactive server) UI
-- **src/ThriftMedia.Api**: Minimal API endpoints (the existing Store handlers currently also live here and are moving to Application)
+- **src/ThriftMedia.Api**: Minimal API endpoints
 - **src/ThriftMedia.AppHost**: .NET Aspire distributed application orchestrator
-- **src/ThriftMedia.Application**: Target home for application-layer use cases and CQRS handlers (not yet populated or referenced)
+- **src/ThriftMedia.Application**: Target home for application-layer use cases and CQRS handlers (Store use cases live here; referenced by Api)
 - **src/ThriftMedia.Contracts**: Request records and DTOs shared across the API boundary
 - **src/ThriftMedia.Domain**: Domain models, rules, and core business logic
 - **src/ThriftMedia.Infrastructure**: Dapper-based persistence and infrastructure implementations

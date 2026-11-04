@@ -1,4 +1,5 @@
 ﻿using ThriftMedia.Contracts.Dto;
+using ThriftMedia.Application.Features.Stores.GetAllStores;
 using ThriftMedia.Mediator;
 
 namespace ThriftMedia.Api.Features.Stores.GetAllStores

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using ThriftMedia.Contracts.Requests;
+using ThriftMedia.Application.Features.Stores.RenameStore;
 using ThriftMedia.Mediator;
 
 namespace ThriftMedia.Api.Features.Stores.RenameStore

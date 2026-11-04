@@ -1,29 +1,8 @@
-using FluentValidation;
-using ThriftMedia.Contracts.Requests;
-using ThriftMedia.Mediator;
 // using DomainStore = ThriftMedia.Domain.Entities.Store;
 // using DomainAddress = ThriftMedia.Domain.ValueObjects.Address;
 // using PersistenceStore = ThriftMedia.Infrastructure.Persistence.Models.Store;
 
-namespace ThriftMedia.Api.Features.Stores.RenameStore
-{
-    public record RenameStoreCommand(int Id, RenameStoreRequest Request) : IRequest<bool>;
-
-    public class RenameStoreValidator : AbstractValidator<RenameStoreCommand>
-    {
-        public RenameStoreValidator()
-        {
-            RuleFor(x => x.Id)
-                .GreaterThan(0)
-                .WithMessage("A valid store ID is required.");
-
-            RuleFor(x => x.Request.NewStoreName)
-                .NotEmpty()
-                .WithMessage("New store name is required.")
-                .MaximumLength(100)
-                .WithMessage("New store name must not exceed 100 characters.");
-        }
-    }
+namespace ThriftMedia.Application.Features.Stores.RenameStore;
 
 // TODO: EF Core removed - reimplement with Dapper in Application/Infrastructure
 //     public class RenameStoreCommandHandler : IRequestHandler<RenameStoreCommand, bool>
@@ -79,4 +58,3 @@ namespace ThriftMedia.Api.Features.Stores.RenameStore
 //                 store.AppUserId);
 //         }
 //     }
-}

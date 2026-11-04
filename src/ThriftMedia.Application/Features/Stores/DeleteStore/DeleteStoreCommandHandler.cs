@@ -1,20 +1,6 @@
-using FluentValidation;
 // using ThriftMedia.Infrastructure.Persistence.Models;
-using ThriftMedia.Mediator;
 
-namespace ThriftMedia.Api.Features.Stores.DeleteStore
-{
-    public record DeleteStoreCommand(int Id) : IRequest<bool>;
-
-    public class DeleteStoreValidator : AbstractValidator<DeleteStoreCommand>
-    {
-        public DeleteStoreValidator()
-        {
-            RuleFor(x => x.Id)
-                .GreaterThan(0)
-                .WithMessage("A valid store ID is required.");
-        }
-    }
+namespace ThriftMedia.Application.Features.Stores.DeleteStore;
 
 // TODO: EF Core removed - reimplement with Dapper in Application/Infrastructure
 //     public class DeleteStoreCommandHandler : IRequestHandler<DeleteStoreCommand, bool>
@@ -44,4 +30,3 @@ namespace ThriftMedia.Api.Features.Stores.DeleteStore
 //             return true;
 //         }
 //     }
-}

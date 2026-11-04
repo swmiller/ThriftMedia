@@ -1,25 +1,22 @@
-using ThriftMedia.Contracts.Dto;
 // using ThriftMedia.Infrastructure.Persistence.Models;
-using ThriftMedia.Mediator;
 
-namespace ThriftMedia.Api.Features.Stores.GetAllStores
-{
-    public class GetAllStoresQuery : IRequest<IEnumerable<StoreDto>>;
+namespace ThriftMedia.Application.Features.Stores.GetStoreById;
 
 // TODO: EF Core removed - reimplement with Dapper in Application/Infrastructure
-//     public class GetAllStoresQueryHandler : IRequestHandler<GetAllStoresQuery, IEnumerable<StoreDto>>
+//     public class GetStoreByIdQueryHandler : IRequestHandler<GetStoreByIdQuery, StoreDto?>
 //     {
 //         private readonly ThriftMediaDbContext _dbContext;
 // 
-//         public GetAllStoresQueryHandler(ThriftMediaDbContext dbContext)
+//         public GetStoreByIdQueryHandler(ThriftMediaDbContext dbContext)
 //         {
 //             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 //         }
 // 
-//         public async Task<IEnumerable<StoreDto>> Handle(GetAllStoresQuery request, CancellationToken cancellationToken)
+//         public async Task<StoreDto?> Handle(GetStoreByIdQuery request, CancellationToken cancellationToken)
 //         {
-//             var allStores = await _dbContext.Stores
+//             var store = await _dbContext.Stores
 //                 .AsNoTracking()
+//                 .Where(s => s.Id == request.Id)
 //                 .Select(s => new StoreDto(
 //                     s.Id,
 //                     s.StoreName,
@@ -45,9 +42,8 @@ namespace ThriftMedia.Api.Features.Stores.GetAllStores
 //                     s.AppUserId,
 //                     s.ProvinceState
 //                 ))
-//                 .ToListAsync(cancellationToken);
+//                 .FirstOrDefaultAsync(cancellationToken);
 // 
-//             return allStores;
+//             return store;
 //         }
 //     }
-}

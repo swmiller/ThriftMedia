@@ -1,4 +1,5 @@
 using FluentValidation;
+using ThriftMedia.Application.Features.Stores.DeleteStore;
 using ThriftMedia.Mediator;
 
 namespace ThriftMedia.Api.Features.Stores.DeleteStore

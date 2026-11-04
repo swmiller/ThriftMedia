@@ -60,8 +60,6 @@ Rules:
 The code doesn't match the architecture above yet. Follow the architecture for new work, and don't copy these patterns:
 
 - **EF Core has been removed.** The `ThriftMediaDbContext`, scaffolded EF entities, and the Npgsql EF package are gone. The Store handlers are commented out (marked `TODO: EF Core removed`) until reimplemented with Dapper, which isn't installed yet. Store endpoints compile but have no handlers.
-- **Store slices are in the wrong place.** Their handlers and validators live in `ThriftMedia.Api/Features/Stores` and should move to Application.
-- **`ThriftMedia.Application` isn't wired in.** It has no code, isn't in `ThriftMedia.sln`, and isn't referenced by Api.
 - **Api startup is incomplete.** `Api/Program.cs` doesn't call `AddServiceDefaults`, `AddMediator`, or register validators or a data access service.
 - **`src/ThriftMedia.Tests` has no tests yet.** It references both `xunit` and `xunit.v3`.
 - **No Dockerfiles exist yet**, although containerized deployment is the documented target.
@@ -79,4 +77,4 @@ dotnet run --project src/ThriftMedia.AppHost/ThriftMedia.AppHost.csproj   # requ
 
 - Skills to load as relevant: `vertical-slice`, `clean-architecture`, `minimal-api`, `aspire`, `authentication`, `testing`, `error-handling`. The `ef-core` skill doesn't apply to new work.
 - `/scaffold` and the kit's templates default to EF Core and may assume a different slice layout. The architecture above takes precedence.
-- Prefer the Roslyn navigator MCP tools (`find_symbol`, `find_references`, `get_project_graph`, `get_diagnostics`) over broad text searches when working with C# symbols. It won't see `ThriftMedia.Application` until the project is added to the solution.
+- Prefer the Roslyn navigator MCP tools (`find_symbol`, `find_references`, `get_project_graph`, `get_diagnostics`) over broad text searches when working with C# symbols.
