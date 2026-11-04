@@ -139,9 +139,12 @@ storefront. Minimum required fields:
 | Phone number           |                                              |
 | Physical street address |                                             |
 | City, State, ZIP       |                                              |
-| Country                |                                              |
+| Country                | United States only                                             |
 | Store website URL      | Optional but helps verification              |
-| Brief store description| What types of secondhand media are sold      |
+| Brief store description| What types of secondhand media are sold    
+| Business license number | Required
+| Business license image upload | Required (PDF or image file) |
+| Store front image upload | Optional (photo of the physical store front) |
 
 ---
 
