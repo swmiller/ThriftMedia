@@ -4,7 +4,7 @@ Distributed platform for discovering local thrift store inventory and driving in
 
 ## Tech Stack
 
-- .NET 10, C#, .NET Aspire 13 orchestration
+- .NET 10, C#, .NET Aspire 13 orchestration. Containers come from Aspire and SDK container publishing (`PublishContainer`); there are no hand-written Dockerfiles, so don't add any
 - ASP.NET Core minimal APIs; Blazor (interactive server) with Bootstrap
 - PostgreSQL in a Docker container, with data bind-mounted to `c:\ThriftMediaDb`
 - **Dapper** for data access; **DbUp** for schema (see Known Gaps)
@@ -62,7 +62,6 @@ The code doesn't match the architecture above yet. Follow the architecture for n
 - **EF Core has been removed.** The `ThriftMediaDbContext`, scaffolded EF entities, and the Npgsql EF package are gone. The Store handlers are commented out (marked `TODO: EF Core removed`) until reimplemented with Dapper, which isn't installed yet. Store endpoints compile but have no handlers.
 - **Api startup is incomplete.** `Api/Program.cs` doesn't call `AddServiceDefaults`, `AddMediator`, or register validators or a data access service.
 - **`src/ThriftMedia.Tests` has no tests yet.** It references both `xunit` and `xunit.v3`.
-- **No Dockerfiles exist yet**, although containerized deployment is the documented target.
 - **Identity storage is undecided.** ASP.NET Core Identity's default stores use EF Core, so using Identity with Dapper requires custom stores or a documented exception. Ask before implementing.
 
 ## Commands
