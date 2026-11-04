@@ -64,7 +64,6 @@ The code doesn't match the architecture above yet. Follow the architecture for n
 - **`ThriftMedia.Application` isn't wired in.** It has no code, isn't in `ThriftMedia.sln`, and isn't referenced by Api.
 - **Api startup is incomplete.** `Api/Program.cs` doesn't call `AddServiceDefaults`, `AddMediator`, or register validators or a data access service.
 - **`src/ThriftMedia.Tests` has no tests yet.** It references both `xunit` and `xunit.v3`.
-- **`src/ThriftMedia.Sql` is a SQL Server project** outside the solution. DbUp scripts are the schema source of truth.
 - **No Dockerfiles exist yet**, although containerized deployment is the documented target.
 - **Identity storage is undecided.** ASP.NET Core Identity's default stores use EF Core, so using Identity with Dapper requires custom stores or a documented exception. Ask before implementing.
 

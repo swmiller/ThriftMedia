@@ -1,6 +1,0 @@
-CREATE SCHEMA [media]
-    AUTHORIZATION [dbo];
-
-
-GO
-
